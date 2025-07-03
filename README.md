@@ -51,4 +51,4 @@ Aile Mutfağı, oyuncuların kendi restoranlarını işlettikleri, çeşitli yem
 
 * Mobil ve PC oyuncuları
 
-![Hollywood, git ogreniyom](yeni bk.jpg)
+![git ogrencem holly](hollywood.jpg)
