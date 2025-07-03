@@ -50,3 +50,5 @@ Aile Mutfağı, oyuncuların kendi restoranlarını işlettikleri, çeşitli yem
 * Rahatlatıcı ve eğlenceli bir deneyim arayanlar
 
 * Mobil ve PC oyuncuları
+
+![Hollywood, git ogreniyom](yeni bk.jpg)
