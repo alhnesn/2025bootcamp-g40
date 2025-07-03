@@ -1,0 +1,6 @@
+*.unity !text !filter !merge !diff
+*.prefab !text !filter !merge !diff
+*.asset !text !filter !merge !diff
+*.mat !text !filter !merge !diff
+*.controller !text !filter !merge !diff
+*.anim !text !filter !merge !diff
