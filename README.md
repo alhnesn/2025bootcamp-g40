@@ -50,7 +50,3 @@ Aile Mutfağı, oyuncuların kendi restoranlarını işlettikleri, çeşitli yem
 * Rahatlatıcı ve eğlenceli bir deneyim arayanlar
 
 * Mobil ve PC oyuncuları
-
-![git ogrencem holly](hollywood.jpg)
-
-![Image Description](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPZL0qCdGp9cAqRrSW-T7yRf6W0Vv1474OiA&s)
