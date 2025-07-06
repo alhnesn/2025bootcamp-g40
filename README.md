@@ -1,4 +1,4 @@
-# Bussin Borek 
+# Culinary Master
 
 ## Takım İsmi
 
@@ -50,3 +50,34 @@ Aile Mutfağı, oyuncuların kendi restoranlarını işlettikleri, çeşitli yem
 * Rahatlatıcı ve eğlenceli bir deneyim arayanlar
 
 * Mobil ve PC oyuncuları
+
+---
+
+# Sprint 1
+
+- **Sprint içinde tamamlanması tahmin edilen puan**: 100 Puan
+
+- **Puan tamamlama mantığı**: Bu sprintteki yoğunluğumuz ve herkesin katılım durumları değerlendirilerek llk sprinte 100 puan ile başlamamız gerektiğine karar verdik.
+
+- **Daily Scrum**: Günlük Scrum toplantılarımızı Discord üzerinden yapmaya karar verdik. Günlük Scrum toplantılarımızın özetini Docs linkinde bulabilirsiniz: [Sprint 1 - Daily Scrums](https://imgur.com/a/daily-scrum-chats-1-VpkQl6x)
+
+- **Sprint board update**: Sprint board screenshot: 
+![Backlog 1](RepoFiles/images/Sprint1_SprintBoard.jpg) 
+
+<details> <summary><h3>Ekran Görüntüleri</h3></summary>
+  
+  ![Screenshot 1](RepoFiles/images/tava_model.png)
+  ![Screenshot 2](RepoFiles/images/simple_burger_cropped.png) 
+  ![Screenshot 3](RepoFiles/images/Recepie_Panel_UI.png)
+  ![Screenshot 4](RepoFiles/images/character_sketch.jpg)
+
+  </details>
+
+- **Sprint Review**: 
+  - Bütün ekip projede kendisine düşen sorumlukluklardan memnuniyetini belirtti ve proje hakkında hevesini belirtti. Oyunun ilerleyişi ve vizyonu ekip arkadaşları tarafından beğenildi, herhangi bir sorun ile karşılaşılmadı.
+  - Sprint Review katılımcıları: Alihan Esen, Fatmanur Sudenaz Helvacı, Rüştü Eren Çaya, Süeda Nur Sarıcan, Ferhat Pamuk
+
+- **Sprint Retrospective:** 
+  - Ekip uzmanlıklara göre ikiye bölündü, bir grup oyunun genel tasarımı üzerine; diğer ekip ise oyunun programlama kısımlarına yoğunlaşacaktı.
+    - Grup 1 (Tasarım): Eren, Sudenaz
+    - Grup 2 (Programlama): Alihan, Süeda, Ferhat
