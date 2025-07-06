@@ -6,6 +6,7 @@ public class PlayerInteraction : MonoBehaviour
     public float interactionDistance = 3f;
     public Transform handPosition;
     public float dropDistance = 1.5f;
+    public LayerMask interactableLayers;
 
     private GameObject heldItem = null;
     private Rigidbody heldItemRb = null;
@@ -33,7 +34,32 @@ public class PlayerInteraction : MonoBehaviour
 
         if (heldItem != null)
         {
-            if (Physics.Raycast(ray, out hitInfo, interactionDistance))
+            // --- THIS IS THE NEW PART ---
+            // Check for Left Mouse Button click to place items.
+            if (Input.GetMouseButtonDown(0)) // 0 is the left mouse button
+            {
+                // Raycast to see if we are looking at something.
+                if (Physics.Raycast(ray, out hitInfo, interactionDistance, interactableLayers))
+                {
+                    // Check if the object we are looking at is a Plate.
+                    Plate plate = hitInfo.collider.GetComponent<Plate>();
+                    if (plate != null)
+                    {
+                        // Try to add the held ingredient to the plate.
+                        bool success = plate.AddIngredient(heldItem);
+
+                        // If the ingredient was successfully added...
+                        if (success)
+                        {
+                            // ...clear the item from our hand.
+                            heldItem = null; 
+                            heldItemRb = null;
+                        }
+                    }
+                }
+            }
+            
+            if (Physics.Raycast(ray, out hitInfo, interactionDistance, interactableLayers))
             {
                 if (hitInfo.collider.GetComponent<CuttingBoard>() != null)
                 {
@@ -63,7 +89,7 @@ public class PlayerInteraction : MonoBehaviour
         }
         else // This is the pickup/interact logic
         {
-            if (Physics.Raycast(ray, out hitInfo, interactionDistance))
+            if (Physics.Raycast(ray, out hitInfo, interactionDistance, interactableLayers))
             {
                 if (hitInfo.collider.GetComponent<Interactable>() != null)
                 {
