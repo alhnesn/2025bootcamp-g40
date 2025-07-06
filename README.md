@@ -59,7 +59,7 @@ Aile Mutfağı, oyuncuların kendi restoranlarını işlettikleri, çeşitli yem
 
 - **Puan tamamlama mantığı**: Bu sprintteki yoğunluğumuz ve herkesin katılım durumları değerlendirilerek llk sprinte 100 puan ile başlamamız gerektiğine karar verdik.
 
-- **Daily Scrum**: Günlük Scrum toplantılarımızı Discord üzerinden yapmaya karar verdik. Günlük Scrum toplantılarımızın özetini Docs linkinde bulabilirsiniz: [Sprint 1 - Daily Scrums](https://imgur.com/a/daily-scrum-chats-1-VpkQl6x)
+- **Daily Scrum**: Günlük Scrum toplantılarımızı Discord üzerinden yapmaya karar verdik. Günlük Scrum toplantılarımızın özetini Docs linkinde bulabilirsiniz: [Sprint 1 - Daily Scrums](https://docs.google.com/document/d/1dmeMon_664vLSAqMdl2b3_5ERpEGoeURvYLJVHWIcCg/edit?usp=sharing)
 
 - **Sprint board update**: Sprint board screenshot: 
 ![Backlog 1](RepoFiles/images/Sprint1_SprintBoard.jpg) 
