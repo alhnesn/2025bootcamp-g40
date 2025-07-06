@@ -43,7 +43,7 @@ public class PlayerInteraction : MonoBehaviour
                     }
                 }
                 // NEW: Check for a Stove
-                if (hitInfo.collider.GetComponent<Stove>() != null)
+                else if (hitInfo.collider.GetComponent<Stove>() != null)
                 {
                     if (Input.GetKeyDown(KeyCode.E))
                     {
