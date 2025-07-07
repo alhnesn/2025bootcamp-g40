@@ -25,7 +25,7 @@ Culinary Master
 
 ## Oyun Açıklaması
 
-Aile Mutfağı, oyuncuların kendi restoranlarını işlettikleri, çeşitli yemekler hazırlayıp müşterilere servis ederek restoranlarını büyüttükleri ve bu süreçte eğlenceli anlar yaşadıkları keyifli bir simülasyon ve yönetim oyunudur. Oyuncular, mutfak becerilerini geliştirirken, yeni tarifler öğrenirken ve restoranlarını dekore ederken kendilerini ev sıcaklığında bir mutfak macerasının içinde bulacaklar.
+Culinary Master, oyuncuların kendi restoranlarını işlettikleri, çeşitli yemekler hazırlayıp müşterilere servis ederek restoranlarını büyüttükleri ve bu süreçte eğlenceli anlar yaşadıkları keyifli bir simülasyon ve yönetim oyunudur. Oyuncular, mutfak becerilerini geliştirirken, yeni tarifler öğrenirken ve restoranlarını dekore ederken kendilerini ev sıcaklığında bir mutfak macerasının içinde bulacaklar.
 
 ## Oyun Özellikleri
 
@@ -75,9 +75,9 @@ Aile Mutfağı, oyuncuların kendi restoranlarını işlettikleri, çeşitli yem
 
 - **Sprint Review**: 
   - Bütün ekip projede kendisine düşen sorumlukluklardan memnuniyetini belirtti ve proje hakkında hevesini belirtti. Oyunun ilerleyişi ve vizyonu ekip arkadaşları tarafından beğenildi, herhangi bir sorun ile karşılaşılmadı.
-  - Sprint Review katılımcıları: Alihan Esen, Fatmanur Sudenaz Helvacı, Rüştü Eren Çaya, Süeda Nur Sarıcan, Ferhat Pamuk
+  - Sprint Review katılımcıları: Alihan Esen, Fatmanur Sudenaz Helvacı, Rüştü Eren Çaya 
 
 - **Sprint Retrospective:** 
   - Ekip uzmanlıklara göre ikiye bölündü, bir grup oyunun genel tasarımı üzerine; diğer ekip ise oyunun programlama kısımlarına yoğunlaşacaktı.
     - Grup 1 (Tasarım): Eren, Sudenaz
-    - Grup 2 (Programlama): Alihan, Süeda, Ferhat
+    - Grup 2 (Programlama): Alihan, Süeda
