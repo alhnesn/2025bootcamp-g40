@@ -77,7 +77,7 @@ public class PlayerInteraction : MonoBehaviour
                 if (pan != null && Input.GetMouseButtonDown(0))
                 {
                     pan.AddFood(heldItem);
-                    heldItem = null; // TODO: this is incorrect. Tava zaten doluysa ve elimdeki itemle sol tik basarsam iki kere : !BUG!
+                    heldItem = null; // FIXME: this is incorrect. Tava zaten doluysa ve elimdeki itemle sol tik basarsam iki kere : !BUG!
                     heldItemRb = null;
                     return;
                 }
