@@ -16,9 +16,6 @@ public class Pan : MonoBehaviour
     private bool isCooking = false;
     private float currentCookTime = 0f;
 
-    // Layer management like the plate system
-    private Dictionary<GameObject, int> originalLayers = new Dictionary<GameObject, int>();
-
     //------------------------------------------------
 
     public void AddFood(GameObject food)
@@ -32,10 +29,7 @@ public class Pan : MonoBehaviour
         
         // No restrictions - any item can be put in the pan
         currentFood = food;
-        
-        // Store original layer
-        originalLayers[currentFood] = currentFood.layer; // TODO: it should also recursively save the layers of the child objects
-        
+    
         // Position the food using its bottom point if it has a Stackable component
         PositionFoodInPan();
         
@@ -74,11 +68,8 @@ public class Pan : MonoBehaviour
         // Stop cooking
         StopCooking();
         
-        if (originalLayers.ContainsKey(food))
-        {
-            SetLayerRecursively(food, originalLayers[food]);
-            originalLayers.Remove(food);
-        }
+        // REPLACE complex layer restoration with simple reset:
+        SetLayerRecursively(food, LayerMask.NameToLayer("Default"));
 
         // Restore interactable component
         if (food.GetComponent<Interactable>() == null)
@@ -170,10 +161,6 @@ public class Pan : MonoBehaviour
             GameObject nextStage = cookable.GetNextCookingStage();
             if (nextStage != null)
             {
-                // Store current layer info before destroying
-                int currentLayer = originalLayers.ContainsKey(currentFood) ? originalLayers[currentFood] : currentFood.layer; // TODO: the fallback makes it so that it is 'PlacedItem'. Instead make 'Default' as fallback
-                originalLayers.Remove(currentFood);
-                
                 // Destroy current food
                 Destroy(currentFood);
                 
@@ -183,9 +170,7 @@ public class Pan : MonoBehaviour
                 
                 // Position the new food properly
                 PositionFoodInPan();
-                
-                // Store the original layer for the new food
-                originalLayers[currentFood] = currentLayer;
+
                 SetLayerRecursively(currentFood, LayerMask.NameToLayer("PlacedItem"));
                 
                 // Make it kinematic

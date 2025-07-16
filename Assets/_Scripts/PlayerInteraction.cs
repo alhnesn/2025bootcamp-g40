@@ -15,41 +15,44 @@ public class PlayerInteraction : MonoBehaviour
     // A reference to the original layer of the item we picked up.
     private Dictionary<GameObject, int> originalLayers = new Dictionary<GameObject, int>();
 
-    // Helper function to set the layer on an object and all its children.
-    private void StoreAndSetLayerRecursively(GameObject obj, int newLayer)
-    {
-        if (obj == null) return;
-        
-        // Store the original layer before changing it
-        originalLayers[obj] = obj.layer;
-        obj.layer = newLayer;
-        
-        // Do the same for all children
-        foreach (Transform child in obj.transform)
-        {
-            if (child == null) continue;
-            StoreAndSetLayerRecursively(child.gameObject, newLayer);
-        }
-    }
+    // Store disabled colliders to re-enable them later
+    private List<Collider> disabledColliders = new List<Collider>();
 
-    private void RestoreLayerRecursively(GameObject obj)
-    {
-        if (obj == null) return;
+    // Helper function to set the layer on an object and all its children.
+    // private void StoreAndSetLayerRecursively(GameObject obj, int newLayer)
+    // {
+    //     if (obj == null) return;
         
-        // Restore the original layer if we have it stored
-        if (originalLayers.ContainsKey(obj))
-        {
-            obj.layer = originalLayers[obj];
-            originalLayers.Remove(obj); // Clean up the dictionary
-        }
+    //     // Store the original layer before changing it
+    //     originalLayers[obj] = obj.layer;
+    //     obj.layer = newLayer;
         
-        // Do the same for all children
-        foreach (Transform child in obj.transform)
-        {
-            if (child == null) continue;
-            RestoreLayerRecursively(child.gameObject);
-        }
-    }
+    //     // Do the same for all children
+    //     foreach (Transform child in obj.transform)
+    //     {
+    //         if (child == null) continue;
+    //         StoreAndSetLayerRecursively(child.gameObject, newLayer);
+    //     }
+    // }
+
+    // private void RestoreLayerRecursively(GameObject obj)
+    // {
+    //     if (obj == null) return;
+        
+    //     // Restore the original layer if we have it stored
+    //     if (originalLayers.ContainsKey(obj))
+    //     {
+    //         obj.layer = originalLayers[obj];
+    //         originalLayers.Remove(obj); // Clean up the dictionary
+    //     }
+        
+    //     // Do the same for all children
+    //     foreach (Transform child in obj.transform)
+    //     {
+    //         if (child == null) continue;
+    //         RestoreLayerRecursively(child.gameObject);
+    //     }
+    // }
     
     // Your updated Update method - this is great!
     void Update()
@@ -74,7 +77,7 @@ public class PlayerInteraction : MonoBehaviour
                 if (pan != null && Input.GetMouseButtonDown(0))
                 {
                     pan.AddFood(heldItem);
-                    heldItem = null;
+                    heldItem = null; // TODO: this is incorrect. Tava zaten doluysa ve elimdeki itemle sol tik basarsam iki kere : !BUG!
                     heldItemRb = null;
                     return;
                 }
@@ -99,20 +102,12 @@ public class PlayerInteraction : MonoBehaviour
             else // HANDS EMPTY
             {
                 Plate plate = hitInfo.collider.GetComponent<Plate>();
-                if (plate != null)
+                if (plate != null && Input.GetMouseButtonDown(0))
                 {
-                    // Interaction with a plate
-                    if (Input.GetMouseButtonDown(0)) // Left Click to take top item
+                    GameObject topItem = plate.TakeTopIngredient();
+                    if (topItem != null)
                     {
-                        GameObject topItem = plate.TakeTopIngredient();
-                        if (topItem != null)
-                        {
-                            PickupItem(topItem);
-                        }
-                    }
-                    else if (Input.GetKeyDown(KeyCode.E)) // 'E' to pick up whole plate
-                    {
-                        PickupItem(hitInfo.collider.gameObject);
+                        PickupItem(topItem);
                     }
                 }
 
@@ -157,7 +152,9 @@ public class PlayerInteraction : MonoBehaviour
         heldItem.transform.localPosition = Vector3.zero;
         heldItem.transform.localRotation = Quaternion.identity;
 
-        StoreAndSetLayerRecursively(heldItem, LayerMask.NameToLayer("HeldItem"));
+        // StoreAndSetLayerRecursively(heldItem, LayerMask.NameToLayer("HeldItem"));
+        // NEW: Disable all colliders instead of changing layers
+        DisableCollidersRecursively(heldItem);
     }
 
     public void DropItem()
@@ -169,7 +166,10 @@ public class PlayerInteraction : MonoBehaviour
             heldItemRb.isKinematic = false;
         }
         
-        RestoreLayerRecursively(heldItem); 
+        // RestoreLayerRecursively(heldItem); 
+        
+        // NEW: Re-enable colliders instead of restoring layers
+        EnableDisabledColliders();
 
         Vector3 dropPosition = playerCamera.transform.position + (playerCamera.transform.forward * dropDistance);
 
@@ -179,6 +179,42 @@ public class PlayerInteraction : MonoBehaviour
 
         heldItem = null;
         heldItemRb = null;
+    }
+
+    // NEW: Helper methods for collider management
+    private void DisableCollidersRecursively(GameObject obj)
+    {
+        if (obj == null) return;
+        
+        // Disable collider on this object
+        Collider collider = obj.GetComponent<Collider>();
+        if (collider != null && collider.enabled)
+        {
+            collider.enabled = false;
+            disabledColliders.Add(collider);
+        }
+        
+        // Disable colliders on all children
+        foreach (Transform child in obj.transform)
+        {
+            if (child == null) continue;
+            DisableCollidersRecursively(child.gameObject);
+        }
+    }
+
+    private void EnableDisabledColliders()
+    {
+        // Re-enable all colliders we disabled
+        foreach (Collider collider in disabledColliders)
+        {
+            if (collider != null) // Check if collider still exists
+            {
+                collider.enabled = true;
+            }
+        }
+        
+        // Clear the list
+        disabledColliders.Clear();
     }
 
 

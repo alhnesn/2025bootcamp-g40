@@ -9,7 +9,6 @@ public class Plate : MonoBehaviour
     
     // PRIVATE FIELDS (internal logic only)
     private List<GameObject> stackedIngredients;  // This stores our ingredient stack
-    private Dictionary<GameObject, int> originalLayers = new Dictionary<GameObject, int>();
 
     void Start()
     {
@@ -26,10 +25,6 @@ public class Plate : MonoBehaviour
             return; // Don't add non-stackable items
         }
         
-        // Store the original layer before we change it
-        originalLayers[ingredient] = ingredient.layer;
-        
-        
         // Add the ingredient to our list
         stackedIngredients.Add(ingredient);
         
@@ -40,7 +35,6 @@ public class Plate : MonoBehaviour
         {
             // Remove from list since we can't stack it
             stackedIngredients.RemoveAt(stackedIngredients.Count - 1);
-            originalLayers.Remove(ingredient);
             Debug.Log("Cannot stack this item - the top item doesn't allow stacking!");
             return;
         }
@@ -84,12 +78,8 @@ public class Plate : MonoBehaviour
         // Remove it from our list
         stackedIngredients.RemoveAt(stackedIngredients.Count - 1);
         
-        // Restore the original layer
-        if (originalLayers.ContainsKey(topIngredient))
-        {
-            SetLayerRecursively(topIngredient, originalLayers[topIngredient]);
-            originalLayers.Remove(topIngredient); // Clean up the dictionary
-        }
+        // REPLACE complex layer restoration:
+        SetLayerRecursively(topIngredient, LayerMask.NameToLayer("Default"));
         
         // Remove parent relationship so it's no longer attached to the plate
         topIngredient.transform.SetParent(null);
