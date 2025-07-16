@@ -70,6 +70,14 @@ public class PlayerInteraction : MonoBehaviour
                     heldItemRb = null;
                     return; // Interaction complete
                 }
+                Pan pan = hitInfo.collider.GetComponent<Pan>();
+                if (pan != null && Input.GetMouseButtonDown(0))
+                {
+                    pan.AddFood(heldItem);
+                    heldItem = null;
+                    heldItemRb = null;
+                    return;
+                }
 
                 // Check for stations or drop
                 if (Input.GetKeyDown(KeyCode.E))
@@ -107,6 +115,17 @@ public class PlayerInteraction : MonoBehaviour
                         PickupItem(hitInfo.collider.gameObject);
                     }
                 }
+
+                Pan pan = hitInfo.collider.GetComponent<Pan>();
+                if (pan != null && Input.GetMouseButtonDown(0))
+                {
+                    GameObject food = pan.RemoveFood();
+                    if (food != null)
+                    {
+                        PickupItem(food);
+                    }
+                }
+
                 else if (hitInfo.collider.GetComponent<Interactable>() != null)
                 {
                     // Regular item pickup
@@ -151,7 +170,7 @@ public class PlayerInteraction : MonoBehaviour
         }
         
         RestoreLayerRecursively(heldItem); 
-        
+
         Vector3 dropPosition = playerCamera.transform.position + (playerCamera.transform.forward * dropDistance);
 
         heldItem.transform.SetParent(null);
