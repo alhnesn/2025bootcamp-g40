@@ -57,21 +57,25 @@ public class CuttingBoard : MonoBehaviour
         Ingredient ingredient = heldItem.GetComponent<Ingredient>();
 
         // Check if the item is a whole "BreadLoaf".
-        if (ingredient != null && ingredient.ingredientName == "BreadLoaf" && ingredient.currentState == IngredientState.Whole)
+        if (ingredient != null && ingredient.ingredientName == "BunFull" && ingredient.currentState == IngredientState.Whole)
         {
-            Debug.Log("Slicing the BreadLoaf.");
+            Debug.Log("Slicing the bread into TopBun and BottomBun.");
 
-            // Get the "TopBun" prefab from the ingredient script.
-            GameObject BunPrefab = ingredient.processedPrefab;
-
-            if (BunPrefab != null)
+            // You'll need to create separate TopBun and BottomBun prefabs
+            // and reference them in your LoafBread ingredient
+            
+            // For now, we can get references from the LoafBread ingredient
+            // You'll need to add these fields to your LoafBread prefab's Ingredient component
+            FullBunIngredient fullBunIngredient = heldItem.GetComponent<FullBunIngredient>();
+            
+            if (fullBunIngredient != null && fullBunIngredient.bunTopPrefab != null && fullBunIngredient.bunBottomPrefab != null)
             {
-                // Destroy the whole loaf the player was holding.
+                // Destroy the whole loaf
                 player.DestroyHeldItem();
 
-                // Create the top and bottom buns and place them on the board.
-                Instantiate(BunPrefab, placementPoint1.position, placementPoint1.rotation);
-                Instantiate(BunPrefab, placementPoint2.position, placementPoint2.rotation);
+                // Create TopBun and BottomBun
+                Instantiate(fullBunIngredient.bunTopPrefab, placementPoint1.position, placementPoint1.rotation);
+                Instantiate(fullBunIngredient.bunBottomPrefab, placementPoint2.position, placementPoint2.rotation);
             }
         }
         // This is the original logic for other items like the tomato.

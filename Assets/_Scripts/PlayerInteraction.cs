@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
@@ -12,17 +13,41 @@ public class PlayerInteraction : MonoBehaviour
     private Rigidbody heldItemRb = null;
 
     // A reference to the original layer of the item we picked up.
-    private int originalLayer;
+    private Dictionary<GameObject, int> originalLayers = new Dictionary<GameObject, int>();
 
     // Helper function to set the layer on an object and all its children.
-    void SetLayerRecursively(GameObject obj, int newLayer)
+    private void StoreAndSetLayerRecursively(GameObject obj, int newLayer)
     {
         if (obj == null) return;
+        
+        // Store the original layer before changing it
+        originalLayers[obj] = obj.layer;
         obj.layer = newLayer;
+        
+        // Do the same for all children
         foreach (Transform child in obj.transform)
         {
             if (child == null) continue;
-            SetLayerRecursively(child.gameObject, newLayer);
+            StoreAndSetLayerRecursively(child.gameObject, newLayer);
+        }
+    }
+
+    private void RestoreLayerRecursively(GameObject obj)
+    {
+        if (obj == null) return;
+        
+        // Restore the original layer if we have it stored
+        if (originalLayers.ContainsKey(obj))
+        {
+            obj.layer = originalLayers[obj];
+            originalLayers.Remove(obj); // Clean up the dictionary
+        }
+        
+        // Do the same for all children
+        foreach (Transform child in obj.transform)
+        {
+            if (child == null) continue;
+            RestoreLayerRecursively(child.gameObject);
         }
     }
     
@@ -32,73 +57,70 @@ public class PlayerInteraction : MonoBehaviour
         Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
         RaycastHit hitInfo;
 
-        if (heldItem != null)
+        if (Physics.Raycast(ray, out hitInfo, interactionDistance, interactableLayers))
         {
-            // --- THIS IS THE NEW PART ---
-            // Check for Left Mouse Button click to place items.
-            if (Input.GetMouseButtonDown(0)) // 0 is the left mouse button
+            if (heldItem != null) // HANDS FULL
             {
-                // Raycast to see if we are looking at something.
-                if (Physics.Raycast(ray, out hitInfo, interactionDistance, interactableLayers))
+                // Check for plate to place item on
+                Plate plate = hitInfo.collider.GetComponent<Plate>();
+                if (plate != null && Input.GetMouseButtonDown(0))
                 {
-                    // Check if the object we are looking at is a Plate.
-                    Plate plate = hitInfo.collider.GetComponent<Plate>();
-                    if (plate != null)
-                    {
-                        // Try to add the held ingredient to the plate.
-                        bool success = plate.AddIngredient(heldItem);
-
-                        // If the ingredient was successfully added...
-                        if (success)
-                        {
-                            // ...clear the item from our hand.
-                            heldItem = null; 
-                            heldItemRb = null;
-                        }
-                    }
+                    plate.AddIngredient(heldItem);
+                    heldItem = null; // We no longer hold the item
+                    heldItemRb = null;
+                    return; // Interaction complete
                 }
-            }
-            
-            if (Physics.Raycast(ray, out hitInfo, interactionDistance, interactableLayers))
-            {
-                if (hitInfo.collider.GetComponent<CuttingBoard>() != null)
+
+                // Check for stations or drop
+                if (Input.GetKeyDown(KeyCode.E))
                 {
-                    if (Input.GetKeyDown(KeyCode.E))
+                    if (hitInfo.collider.GetComponent<CuttingBoard>() != null)
                     {
                         hitInfo.collider.GetComponent<CuttingBoard>().Process(this);
                     }
-                }
-                // NEW: Check for a Stove
-                else if (hitInfo.collider.GetComponent<Stove>() != null)
-                {
-                    if (Input.GetKeyDown(KeyCode.E))
+                    else if (hitInfo.collider.GetComponent<Stove>() != null)
                     {
-                        // Call the stove's Interact method
                         hitInfo.collider.GetComponent<Stove>().Interact(this);
                     }
+                    else
+                    {
+                        DropItem();
+                    }
                 }
-                else if (Input.GetKeyDown(KeyCode.E))
-                {
-                    DropItem();
-                }
-            } 
-            else if (Input.GetKeyDown(KeyCode.E))
-            {
-                DropItem();
             }
-        }
-        else // This is the pickup/interact logic
-        {
-            if (Physics.Raycast(ray, out hitInfo, interactionDistance, interactableLayers))
+            else // HANDS EMPTY
             {
-                if (hitInfo.collider.GetComponent<Interactable>() != null)
+                Plate plate = hitInfo.collider.GetComponent<Plate>();
+                if (plate != null)
                 {
+                    // Interaction with a plate
+                    if (Input.GetMouseButtonDown(0)) // Left Click to take top item
+                    {
+                        GameObject topItem = plate.TakeTopIngredient();
+                        if (topItem != null)
+                        {
+                            PickupItem(topItem);
+                        }
+                    }
+                    else if (Input.GetKeyDown(KeyCode.E)) // 'E' to pick up whole plate
+                    {
+                        PickupItem(hitInfo.collider.gameObject);
+                    }
+                }
+                else if (hitInfo.collider.GetComponent<Interactable>() != null)
+                {
+                    // Regular item pickup
                     if (Input.GetKeyDown(KeyCode.E))
                     {
                         PickupItem(hitInfo.collider.gameObject);
                     }
                 }
             }
+        }
+        else if (heldItem != null && Input.GetKeyDown(KeyCode.E))
+        {
+            // Drop item if looking at nothing
+            DropItem();
         }
     }
     
@@ -116,37 +138,31 @@ public class PlayerInteraction : MonoBehaviour
         heldItem.transform.localPosition = Vector3.zero;
         heldItem.transform.localRotation = Quaternion.identity;
 
-        // NEW: Change the object to the "HeldItem" layer.
-        originalLayer = heldItem.layer; // Store the original layer.
-        SetLayerRecursively(heldItem, LayerMask.NameToLayer("HeldItem"));
+        StoreAndSetLayerRecursively(heldItem, LayerMask.NameToLayer("HeldItem"));
     }
 
     public void DropItem()
     {
-        // Re-enable the physics.
+        if (heldItem == null) return;
+
         if (heldItemRb != null)
         {
             heldItemRb.isKinematic = false;
         }
         
-        // Change the object back to its original layer.
-        SetLayerRecursively(heldItem, originalLayer);
-
-        // Calculate the drop position in the middle of the screen, in front of the player.
+        RestoreLayerRecursively(heldItem); 
+        
         Vector3 dropPosition = playerCamera.transform.position + (playerCamera.transform.forward * dropDistance);
 
-        // Un-parent the item from the hand.
         heldItem.transform.SetParent(null);
         
-        // Set the item's position to the calculated drop position.
         heldItem.transform.position = dropPosition;
 
-        // Clear our "held item" variables.
         heldItem = null;
         heldItemRb = null;
     }
 
-    // These other methods remain the same.
+
     public bool IsHoldingItem() { return heldItem != null; }
     public GameObject GetHeldItem() { return heldItem; }
     public void DestroyHeldItem()

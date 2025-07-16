@@ -3,80 +3,189 @@ using UnityEngine;
 
 public class Plate : MonoBehaviour
 {
-    public Transform stackingPoint;
-
-    private List<GameObject> stackedIngredients = new List<GameObject>();
-    private float currentTopOfStack;
+    // PUBLIC FIELDS (visible in Inspector)
+    public Transform plateTop;  // A child GameObject marking where ingredients go
+    public Transform ingredientParent;
+    
+    // PRIVATE FIELDS (internal logic only)
+    private List<GameObject> stackedIngredients;  // This stores our ingredient stack
+    private Dictionary<GameObject, int> originalLayers = new Dictionary<GameObject, int>();
 
     void Start()
     {
-        // No change here, this part is correct.
-        Collider plateCollider = GetComponent<Collider>();
-        currentTopOfStack = stackingPoint.position.y + (plateCollider.bounds.size.y / 2f);
+        // Initialize the list - this creates an empty list that can hold GameObjects
+        stackedIngredients = new List<GameObject>();
     }
 
-    // A helper function to change an object's layer. We'll need this for the second fix.
-    void SetLayerRecursively(GameObject obj, int newLayer)
+    public void AddIngredient(GameObject ingredient)
+    {
+        Stackable stackableComponent = ingredient.GetComponent<Stackable>();
+        if (stackableComponent == null || !stackableComponent.canStackOnOthers)
+        {
+            Debug.Log("This item cannot be stacked!");
+            return; // Don't add non-stackable items
+        }
+        
+        // Store the original layer before we change it
+        originalLayers[ingredient] = ingredient.layer;
+        
+        
+        // Add the ingredient to our list
+        stackedIngredients.Add(ingredient);
+        
+        // Calculate the position using stacking points
+        Vector3 newPosition = CalculateStackPosition(ingredient);
+        // Check if stacking was allowed
+        if (newPosition == Vector3.zero)
+        {
+            // Remove from list since we can't stack it
+            stackedIngredients.RemoveAt(stackedIngredients.Count - 1);
+            originalLayers.Remove(ingredient);
+            Debug.Log("Cannot stack this item - the top item doesn't allow stacking!");
+            return;
+        }
+        ingredient.transform.position = newPosition;
+
+        // Reset the rotation to sit properly on the plate
+        ingredient.transform.rotation = plateTop.rotation;
+        
+        // Make the ingredient a child of the plate so it moves with the plate
+        ingredient.transform.SetParent(ingredientParent);
+        
+        // Set the ingredient to the 'PlacedItem' layer to prevent collisions
+        SetLayerRecursively(ingredient, LayerMask.NameToLayer("PlacedItem"));
+        
+        // Remove Interactable component so it can't be picked up directly
+        Interactable interactableComponent = ingredient.GetComponent<Interactable>();
+        if (interactableComponent != null)
+        {
+            Destroy(interactableComponent);
+        }
+
+        // Make sure the ingredient doesn't fall through physics
+        Rigidbody ingredientRb = ingredient.GetComponent<Rigidbody>();
+        if (ingredientRb != null)
+        {
+            ingredientRb.isKinematic = true;
+        }
+    }
+
+    public GameObject TakeTopIngredient()
+    {
+        // Check if there are any ingredients on the plate
+        if (stackedIngredients.Count == 0)
+        {
+            return null; // No ingredients to take
+        }
+        
+        // Get the topmost ingredient (last item in the list)
+        GameObject topIngredient = stackedIngredients[stackedIngredients.Count - 1];
+        
+        // Remove it from our list
+        stackedIngredients.RemoveAt(stackedIngredients.Count - 1);
+        
+        // Restore the original layer
+        if (originalLayers.ContainsKey(topIngredient))
+        {
+            SetLayerRecursively(topIngredient, originalLayers[topIngredient]);
+            originalLayers.Remove(topIngredient); // Clean up the dictionary
+        }
+        
+        // Remove parent relationship so it's no longer attached to the plate
+        topIngredient.transform.SetParent(null);
+        
+        // Restore the Interactable component so it can be picked up normally
+        if (topIngredient.GetComponent<Interactable>() == null)
+        {
+            topIngredient.AddComponent<Interactable>();
+        }
+
+        // Restore physics so it can be picked up normally
+        Rigidbody ingredientRb = topIngredient.GetComponent<Rigidbody>();
+        if (ingredientRb != null)
+        {
+            ingredientRb.isKinematic = false;
+        }
+        
+        return topIngredient;
+    }
+
+    private Vector3 CalculateStackPosition(GameObject newIngredient)
+    {
+        Stackable newStackable = newIngredient.GetComponent<Stackable>();
+        
+        // Start from the plate surface
+        Vector3 basePosition = plateTop.position;
+
+        Vector3 bottomOffset = Vector3.zero;
+        
+        // If this is the first item, place it directly on the plate
+        if (stackedIngredients.Count == 1)
+        {
+            // Calculate the offset from ingredient center to its bottom point
+            
+            if (newStackable != null && newStackable.bottomPoint != null)
+            {
+                bottomOffset = newIngredient.transform.position - newStackable.GetBottomPosition();
+            }
+            
+            return basePosition + bottomOffset;
+        }
+        
+        // Check if the topmost item allows stacking on top
+        GameObject topMostItem = stackedIngredients[stackedIngredients.Count - 2]; // -2 because we already added the new item
+        Stackable topMostStackable = topMostItem.GetComponent<Stackable>();
+        
+        if (topMostStackable == null || !topMostStackable.canBeStackedOn)
+        {
+            Debug.Log("Cannot stack on top of " + topMostItem.name + " - stacking not allowed!");
+            return Vector3.zero; // This will need to be handled in AddIngredient
+        }
+        
+        // If we can stack, use the topmost item's top position
+        Vector3 topPosition = topMostStackable.GetTopPosition();
+        
+        // Calculate offset between new ingredient's bottom point and its center
+        if (newStackable != null && newStackable.bottomPoint != null)
+        {
+            bottomOffset = newIngredient.transform.position - newStackable.GetBottomPosition();
+        }
+        
+        return topPosition + bottomOffset;
+    }
+
+    private float CalculateStackHeight()
+    {
+        float totalHeight = 0f;
+        
+        // Loop through all ingredients except the one we just added
+        for (int i = 0; i < stackedIngredients.Count - 1; i++)
+        {
+            GameObject ingredient = stackedIngredients[i];
+            
+            // Get the ingredient's height using its Renderer bounds
+            Renderer renderer = ingredient.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                totalHeight += renderer.bounds.size.y;
+            }
+        }
+        
+        return totalHeight;
+    }
+
+    // Helper method to set layer on object and all its children
+    private void SetLayerRecursively(GameObject obj, int newLayer)
     {
         if (obj == null) return;
+        
         obj.layer = newLayer;
+        
+        // Set the layer for all child objects too
         foreach (Transform child in obj.transform)
         {
             if (child == null) continue;
             SetLayerRecursively(child.gameObject, newLayer);
-        }
-    }
-
-    public bool AddIngredient(GameObject ingredientObject)
-    {
-        Ingredient ingredient = ingredientObject.GetComponent<Ingredient>();
-        if (ingredient == null || !IsCorrectIngredient(ingredient))
-        {
-            Debug.Log("Wrong ingredient or order!");
-            return false;
-        }
-
-        Collider ingredientCollider = ingredientObject.GetComponent<Collider>();
-        if (ingredientCollider == null) return false;
-
-        // --- REVISED PLACEMENT LOGIC ---
-        // This logic is now based on the collider's bounds, not the transform's pivot.
-        float ingredientHeight = ingredientCollider.bounds.size.y;
-        Vector3 ingredientCenterOffset = ingredientObject.transform.position - ingredientCollider.bounds.center;
-
-        Vector3 placementPosition = new Vector3(
-            stackingPoint.position.x,
-            currentTopOfStack + (ingredientHeight / 2f),
-            stackingPoint.position.z
-        ) + ingredientCenterOffset;
-
-        ingredientObject.transform.position = placementPosition;
-        ingredientObject.transform.rotation = stackingPoint.rotation;
-        ingredientObject.transform.SetParent(this.transform);
-        if (ingredientObject.GetComponent<Rigidbody>() != null)
-        {
-            ingredientObject.GetComponent<Rigidbody>().isKinematic = true;
-        }
-
-        currentTopOfStack += ingredientHeight;
-        stackedIngredients.Add(ingredientObject);
-
-        // This is for Fix #2: Move the placed ingredient to a new layer so it doesn't block clicks.
-        SetLayerRecursively(ingredientObject, LayerMask.NameToLayer("PlacedItem"));
-
-        Debug.Log(ingredient.ingredientName + " added to the plate!");
-        return true;
-    }
-
-    private bool IsCorrectIngredient(Ingredient ingredient)
-    {
-        int currentStep = stackedIngredients.Count;
-        switch (currentStep)
-        {
-            case 0: return ingredient.ingredientName == "Bun";
-            case 1: return ingredient.ingredientName == "BurgerPatty" && ingredient.currentState == IngredientState.Cooked;
-            case 2: return ingredient.ingredientName == "Bun";
-            default: return false;
         }
     }
 }

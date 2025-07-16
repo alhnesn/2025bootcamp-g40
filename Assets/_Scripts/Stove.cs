@@ -22,7 +22,7 @@ public class Stove : MonoBehaviour
         Ingredient ingredient = heldItem.GetComponent<Ingredient>();
 
         // Check if the player is holding a "Whole" uncooked burger patty
-        if (ingredient != null && ingredient.ingredientName == "BurgerPatty" && ingredient.currentState == IngredientState.Whole)
+        if (ingredient != null && ingredient.ingredientName == "UncookedBurger" && ingredient.currentState == IngredientState.Whole)
         {
             // Take the item from the player
             player.DestroyHeldItem();
