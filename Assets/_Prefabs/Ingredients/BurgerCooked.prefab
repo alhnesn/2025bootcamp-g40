@@ -142,6 +142,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5551698fff8c08a499c78bff28259b66, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8267286290907453782}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5551698fff8c08a499c78bff28259b66, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5643657578080337409}
   m_SourcePrefab: {fileID: 100100000, guid: 5551698fff8c08a499c78bff28259b66, type: 3}
 --- !u!1 &3789912664882031666 stripped
 GameObject:
@@ -255,6 +258,21 @@ MonoBehaviour:
   currentCookingState: 1
   nextTime: 5
   nextPrefab: {fileID: 7829960300476612253, guid: 549c4a7aac35a8747a4eb23ca2d7d94b, type: 3}
+--- !u!114 &-5643657578080337409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3789912664882031666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f64e0926fd6614ab571f1ebdc7cc1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  holdPositionPoint: {fileID: 0}
+  holdRotationPoint: {fileID: 0}
+  useCustomHolding: 1
 --- !u!4 &4599206362587362952 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5551698fff8c08a499c78bff28259b66, type: 3}

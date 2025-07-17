@@ -18,13 +18,13 @@ public class Pan : MonoBehaviour
 
     //------------------------------------------------
 
-    public void AddFood(GameObject food)
+    public bool AddFood(GameObject food)
     {
         // Only allow one item at a time in the pan
         if (currentFood != null)
         {
             Debug.Log("Pan is already occupied!");
-            return;
+            return false;
         }
         
         // No restrictions - any item can be put in the pan
@@ -57,6 +57,8 @@ public class Pan : MonoBehaviour
         {
             StartCooking();
         }
+
+        return true;
     }
 
     public GameObject RemoveFood()

@@ -16,13 +16,13 @@ public class Plate : MonoBehaviour
         stackedIngredients = new List<GameObject>();
     }
 
-    public void AddIngredient(GameObject ingredient)
+    public bool AddIngredient(GameObject ingredient)
     {
         Stackable stackableComponent = ingredient.GetComponent<Stackable>();
         if (stackableComponent == null || !stackableComponent.canStackOnOthers)
         {
             Debug.Log("This item cannot be stacked!");
-            return; // Don't add non-stackable items
+            return false; // Don't add non-stackable items
         }
         
         // Add the ingredient to our list
@@ -36,7 +36,7 @@ public class Plate : MonoBehaviour
             // Remove from list since we can't stack it
             stackedIngredients.RemoveAt(stackedIngredients.Count - 1);
             Debug.Log("Cannot stack this item - the top item doesn't allow stacking!");
-            return;
+            return false;
         }
         ingredient.transform.position = newPosition;
 
@@ -62,6 +62,8 @@ public class Plate : MonoBehaviour
         {
             ingredientRb.isKinematic = true;
         }
+
+        return true;
     }
 
     public GameObject TakeTopIngredient()
