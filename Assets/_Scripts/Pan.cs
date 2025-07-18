@@ -9,7 +9,8 @@ public class Pan : MonoBehaviour
     public Transform cookingSpot;  // The child object you created (inside point of pan)
     
     [Header("Stove Connection")]
-    public bool isOnStove = false;
+    private bool isOnStove = false;
+    private Stove currentStove = null;
     
     // Track what's cooking in the pan
     private GameObject currentFood = null;
@@ -115,16 +116,19 @@ public class Pan : MonoBehaviour
 
     public void StartCooking()
     {
-        Cookable cookable = currentFood.GetComponent<Cookable>();
-        if (cookable != null && cookable.CanCookFurther())
+        if (currentFood != null && isOnStove)  // Only cook if on stove
         {
-            isCooking = true;
-            currentCookTime = 0f;
-            Debug.Log("Started cooking " + currentFood.name + " (" + cookable.currentCookingState + ")");
-        }
-        else
-        {
-            Debug.Log("This food cannot cook further!");
+            Cookable cookable = currentFood.GetComponent<Cookable>();
+            if (cookable != null && cookable.CanCookFurther())
+            {
+                isCooking = true;
+                currentCookTime = 0f;
+                Debug.Log("Started cooking " + currentFood.name + " (" + cookable.currentCookingState + ")");
+            }
+            else
+            {
+                Debug.Log("This food cannot cook further!");
+            }
         }
     }
     
@@ -222,6 +226,22 @@ public class Pan : MonoBehaviour
     public bool HasFood()
     {
         return currentFood != null;
+    }
+
+    // NEW: Method for stove to control cooking state
+    public void SetOnStove(bool onStove, Stove stove)
+    {
+        isOnStove = onStove;
+        currentStove = stove;
+        
+        if (isOnStove && currentFood != null)
+        {
+            StartCooking();
+        }
+        else if (!isOnStove)
+        {
+            StopCooking();
+        }
     }
 
 }

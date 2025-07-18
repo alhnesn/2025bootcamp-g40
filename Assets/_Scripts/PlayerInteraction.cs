@@ -49,6 +49,16 @@ public class PlayerInteraction : MonoBehaviour
                     }
                     return;
                 }
+                Stove stove = hitInfo.collider.GetComponent<Stove>();
+                if (stove != null && Input.GetMouseButtonDown(0))
+                {
+                    if (stove.PlaceTool(heldItem))
+                    {
+                        heldItem = null;
+                        heldItemRb = null;
+                    }
+                    return;
+                }
 
                 // Check for stations or drop
                 if (Input.GetKeyDown(KeyCode.E))
@@ -56,10 +66,6 @@ public class PlayerInteraction : MonoBehaviour
                     if (hitInfo.collider.GetComponent<CuttingBoard>() != null)
                     {
                         hitInfo.collider.GetComponent<CuttingBoard>().Process(this);
-                    }
-                    else if (hitInfo.collider.GetComponent<Stove>() != null)
-                    {
-                        hitInfo.collider.GetComponent<Stove>().Interact(this);
                     }
                     else
                     {
@@ -86,6 +92,16 @@ public class PlayerInteraction : MonoBehaviour
                     if (food != null)
                     {
                         PickupItem(food);
+                    }
+                }
+
+                Stove stove = hitInfo.collider.GetComponent<Stove>();
+                if (stove != null && Input.GetMouseButtonDown(0))
+                {
+                    GameObject tool = stove.RemoveToolFromPosition(hitInfo.point);
+                    if (tool != null)
+                    {
+                        PickupItem(tool);
                     }
                 }
 

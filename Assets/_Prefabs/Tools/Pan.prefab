@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2445805402257098996
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 144528294720964685}
+  m_Layer: 0
+  m_Name: StoveRotationPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &144528294720964685
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2445805402257098996}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6634086105983192274}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2935798798049755927
 GameObject:
   m_ObjectHideFlags: 0
@@ -57,6 +88,37 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.05, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6634086105983192274}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4651565732751449266
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3132005888901271487}
+  m_Layer: 0
+  m_Name: StovePositionPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3132005888901271487
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4651565732751449266}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -161,6 +223,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6b82beb84fa8bc148aa905dde67ce5a1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7676647192850174009}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6b82beb84fa8bc148aa905dde67ce5a1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3132005888901271487}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6b82beb84fa8bc148aa905dde67ce5a1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 144528294720964685}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6b82beb84fa8bc148aa905dde67ce5a1, type: 3}
       insertIndex: -1
@@ -177,6 +245,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6b82beb84fa8bc148aa905dde67ce5a1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 853941356611263654}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6b82beb84fa8bc148aa905dde67ce5a1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8674932005154859834}
   m_SourcePrefab: {fileID: 100100000, guid: 6b82beb84fa8bc148aa905dde67ce5a1, type: 3}
 --- !u!1 &6294574904432645736 stripped
 GameObject:
@@ -257,7 +328,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cookingSpot: {fileID: 2539904805980869209}
-  isOnStove: 0
 --- !u!114 &853941356611263654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,6 +343,21 @@ MonoBehaviour:
   holdPositionPoint: {fileID: 6665342643593511800}
   holdRotationPoint: {fileID: 7676647192850174009}
   useCustomHolding: 1
+--- !u!114 &8674932005154859834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6294574904432645736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 313a6ba57d515e64e9a89b19382c723d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stovePositionPoint: {fileID: 3132005888901271487}
+  stoveRotationPoint: {fileID: 144528294720964685}
+  useCustomPlacement: 1
 --- !u!4 &6634086105983192274 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6b82beb84fa8bc148aa905dde67ce5a1, type: 3}
