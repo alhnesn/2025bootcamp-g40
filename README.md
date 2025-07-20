@@ -62,14 +62,14 @@ Culinary Master, oyuncuların kendi restoranlarını işlettikleri, çeşitli ye
 - **Daily Scrum**: Günlük Scrum toplantılarımızı Discord üzerinden yapmaya karar verdik. Günlük Scrum toplantılarımızın özetini Docs linkinde bulabilirsiniz: [Sprint 1 - Daily Scrums](https://docs.google.com/document/d/1dmeMon_664vLSAqMdl2b3_5ERpEGoeURvYLJVHWIcCg/edit?usp=sharing)
 
 - **Sprint board update**: Sprint board screenshot: 
-![Backlog 1](RepoFiles/images/Sprint1_SprintBoard.jpg) 
+![Backlog 1](RepoFiles/images/Sprint1/Sprint1_SprintBoard.jpg) 
 
 <details> <summary><h3>Ekran Görüntüleri</h3></summary>
   
-  ![Screenshot 1](RepoFiles/images/tava_model.png)
-  ![Screenshot 2](RepoFiles/images/simple_burger_cropped.png) 
-  ![Screenshot 3](RepoFiles/images/Recepie_Panel_UI.png)
-  ![Screenshot 4](RepoFiles/images/character_sketch.jpg)
+  ![Screenshot 1](RepoFiles/images/Sprint1/tava_model.png)
+  ![Screenshot 2](RepoFiles/images/Sprint1/simple_burger_cropped.png) 
+  ![Screenshot 3](RepoFiles/images/Sprint1/Recepie_Panel_UI.png)
+  ![Screenshot 4](RepoFiles/images/Sprint1/character_sketch.jpg)
 
   </details>
 
@@ -79,5 +79,36 @@ Culinary Master, oyuncuların kendi restoranlarını işlettikleri, çeşitli ye
 
 - **Sprint Retrospective:** 
   - Ekip uzmanlıklara göre ikiye bölündü, bir grup oyunun genel tasarımı üzerine; diğer ekip ise oyunun programlama kısımlarına yoğunlaşacaktı.
+    - Grup 1 (Tasarım): Eren, Sudenaz
+    - Grup 2 (Programlama): Alihan, Süeda
+
+
+# Sprint 2
+
+- **Sprint içinde tamamlanması tahmin edilen puan**: 80 Puan
+
+- **Puan tamamlama mantığı**: Bu sprintte bazılarımıazın stajının başlaması ve kişisel durumlar değerlendirilerek 80 puan tamamlamamız gerektiğine karar verdik.
+
+- **Daily Scrum**: Günlük Scrum toplantılarımızı Discord üzerinden yapmaya karar verdik. Günlük Scrum toplantılarımızın ekran görüntülerini burada bulabilirsiniz: [Sprint 2 - Daily Scrums](RepoFiles/images/Sprint2/DailyScrums)
+
+- **Sprint board update**: Sprint board screenshot: 
+![Backlog 1](RepoFiles/images/Sprint2/SprintBoard/Sprint2_SprintBoard.jpg) 
+
+<details> <summary><h3>Ekran Görüntüleri</h3></summary>
+  
+  ![Screenshot 1](RepoFiles/images/Sprint2/burnt_burger.jpg)
+  ![Screenshot 2](RepoFiles/images/Sprint2/cooked_burger.jpg) 
+  ![Screenshot 3](RepoFiles/images/Sprint2/uncooked_burger.jpg)
+  ![Screenshot 4](RepoFiles/images/Sprint2/kitchen_temp.jpg)
+  ![Screenshot 5](RepoFiles/images/Sprint2/basic_cook_and_assemble.webp)
+
+  </details>
+
+- **Sprint Review**: 
+  - Ekip olarak çalıştıkça proje üzerinde çalışmanın daha eğelenceli hale geldiğini ve artık oyundan katı sonuçlar görebildiğimiz evreye vardığımızı farkettik. Bu da bizi proje için daha motive hale getirdi.
+  - Sprint Review katılımcıları: Alihan Esen, Fatmanur Sudenaz Helvacı, Rüştü Eren Çaya 
+
+- **Sprint Retrospective:** 
+  - Ekiptekiler önceki sprintte kendilerine verilen görevlerden memnun olduğunu ve oldukları departmanda çalışmaya devam etmek istediklerini belirtti
     - Grup 1 (Tasarım): Eren, Sudenaz
     - Grup 2 (Programlama): Alihan, Süeda
