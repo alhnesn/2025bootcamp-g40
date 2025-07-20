@@ -108,7 +108,7 @@ Culinary Master, oyuncuların kendi restoranlarını işlettikleri, çeşitli ye
 
 - **Sprint Review**: 
   - Ekip olarak çalıştıkça proje üzerinde çalışmanın daha eğelenceli hale geldiğini ve artık oyundan katı sonuçlar görebildiğimiz evreye vardığımızı farkettik. Bu da bizi proje için daha motive hale getirdi.
-  - Sprint Review katılımcıları: Alihan Esen, Fatmanur Sudenaz Helvacı, Rüştü Eren Çaya 
+  - Sprint Review katılımcıları: Alihan Esen, Fatmanur Sudenaz Helvacı, Rüştü Eren Çaya, Süeda Nur Sarıcan
 
 - **Sprint Retrospective:** 
   - Ekiptekiler önceki sprintte kendilerine verilen görevlerden memnun olduğunu ve oldukları departmanda çalışmaya devam etmek istediklerini belirtti
