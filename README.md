@@ -101,6 +101,8 @@ Culinary Master, oyuncuların kendi restoranlarını işlettikleri, çeşitli ye
   ![Screenshot 3](RepoFiles/images/Sprint2/uncooked_burger.jpg)
   ![Screenshot 4](RepoFiles/images/Sprint2/kitchen_temp.jpg)
   ![Screenshot 5](RepoFiles/images/Sprint2/basic_cook_and_assemble.webp)
+  ![Screenshot 6](RepoFiles/images/Sprint2/shop_menu.jpg)
+  ![Screenshot 7](RepoFiles/images/Sprint2/customer_order.jpg)
 
   </details>
 
