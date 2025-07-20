@@ -248,6 +248,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6b82beb84fa8bc148aa905dde67ce5a1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8674932005154859834}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6b82beb84fa8bc148aa905dde67ce5a1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -6534691149899624762}
   m_SourcePrefab: {fileID: 100100000, guid: 6b82beb84fa8bc148aa905dde67ce5a1, type: 3}
 --- !u!1 &6294574904432645736 stripped
 GameObject:
@@ -358,6 +361,20 @@ MonoBehaviour:
   stovePositionPoint: {fileID: 3132005888901271487}
   stoveRotationPoint: {fileID: 144528294720964685}
   useCustomPlacement: 1
+--- !u!114 &-6534691149899624762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6294574904432645736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa4eadfbc72cadb43b5b3a18f58301b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxItems: 1
+  stackingPoint: {fileID: 2539904805980869209}
 --- !u!4 &6634086105983192274 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6b82beb84fa8bc148aa905dde67ce5a1, type: 3}

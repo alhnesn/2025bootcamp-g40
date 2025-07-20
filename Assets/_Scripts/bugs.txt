@@ -1,0 +1,9 @@
+2- sometimes can't take back pan after the food on it is cooked.
+
+3- objects on plate block picking up the plate (because we removed the PlacedItem layer thingy)
+
+
+fix the bugs and TODOs in stove
+
+FIXED:
+- When I take a pan with an object on it off the stove and drop it, the physics of it get buggy and it flies. (I think this is because removing a pan from a stove makes it so that the pan does't ignore the collission between the object on it (or the other way around))

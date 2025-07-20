@@ -575,10 +575,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -3710294421133892974, guid: d6c9293233bf4ce4da8a1c29ca8bdf59, type: 3}
-      propertyPath: m_Convex
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6294574904432645736, guid: d6c9293233bf4ce4da8a1c29ca8bdf59, type: 3}
       propertyPath: m_Name
       value: Pan (1)
@@ -1262,10 +1258,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 8046466580091792676, guid: bdb8450dc514541499675487bcef6dc7, type: 3}
-      propertyPath: detectionRadius
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 8308912463003563959, guid: bdb8450dc514541499675487bcef6dc7, type: 3}
       propertyPath: m_Name
       value: Stove
@@ -1722,10 +1714,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -3710294421133892974, guid: d6c9293233bf4ce4da8a1c29ca8bdf59, type: 3}
-      propertyPath: m_Convex
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6294574904432645736, guid: d6c9293233bf4ce4da8a1c29ca8bdf59, type: 3}
       propertyPath: m_Name
       value: Pan

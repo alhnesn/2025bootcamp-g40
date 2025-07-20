@@ -28,27 +28,18 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (heldItem != null) // HANDS FULL
             {
-                // Check for plate to place item on
-                Plate plate = hitInfo.collider.GetComponent<Plate>();
-                if (plate != null && Input.GetMouseButtonDown(0))
+                // Check for container to place item on
+                Container container = hitInfo.collider.GetComponent<Container>();
+                if (container != null && Input.GetMouseButtonDown(0))
                 {
-                    if (plate.AddIngredient(heldItem))
-                    {
-                        heldItem = null;
-                        heldItemRb = null;
-                    }
-                    return; // Interaction complete
-                }
-                Pan pan = hitInfo.collider.GetComponent<Pan>();
-                if (pan != null && Input.GetMouseButtonDown(0))
-                {
-                    if (pan.AddFood(heldItem))
+                    if (container.TryAddItem(heldItem))
                     {
                         heldItem = null;
                         heldItemRb = null;
                     }
                     return;
                 }
+                
                 Stove stove = hitInfo.collider.GetComponent<Stove>();
                 if (stove != null && Input.GetMouseButtonDown(0))
                 {
@@ -75,23 +66,13 @@ public class PlayerInteraction : MonoBehaviour
             }
             else // HANDS EMPTY
             {
-                Plate plate = hitInfo.collider.GetComponent<Plate>();
-                if (plate != null && Input.GetMouseButtonDown(0))
+                Container container = hitInfo.collider.GetComponent<Container>();
+                if (container != null && Input.GetMouseButtonDown(0))
                 {
-                    GameObject topItem = plate.TakeTopIngredient();
+                    GameObject topItem = container.TakeTopItem();
                     if (topItem != null)
                     {
                         PickupItem(topItem);
-                    }
-                }
-
-                Pan pan = hitInfo.collider.GetComponent<Pan>();
-                if (pan != null && Input.GetMouseButtonDown(0))
-                {
-                    GameObject food = pan.RemoveFood();
-                    if (food != null)
-                    {
-                        PickupItem(food);
                     }
                 }
 

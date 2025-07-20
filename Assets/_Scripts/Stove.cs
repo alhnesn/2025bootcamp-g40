@@ -6,7 +6,7 @@ public class Stove : MonoBehaviour
     public Transform[] cookingSpots;  // Array of cooking spot transforms (CookingSpot1, 2, 3, 4)
     
     [Header("Stove Settings")]
-    public float detectionRadius = 0.5f;  // How close to place tools on spots
+    public float detectionRadius = 10f;  // How close to place tools on spots
     
     // Track what's on each cooking spot
     private GameObject[] toolsOnSpots;
@@ -45,8 +45,9 @@ public class Stove : MonoBehaviour
         tool.transform.SetParent(cookingSpots[spotIndex]);
         stoveTool.SetLocalStovePlacement();
         
-        // Set layer to PlacedItem
-        SetLayerRecursively(tool, LayerMask.NameToLayer("PlacedItem")); // TODO: this should not be like this
+        // SIMPLIFIED: Two lines instead of multiple methods
+        CollisionManager.SetCollisionBetweenObjects(tool, gameObject, true);
+        CollisionManager.SetCollisionBetweenObjectAndArray(tool, toolsOnSpots, true);
         
         // Make it kinematic
         Rigidbody toolRb = tool.GetComponent<Rigidbody>();
@@ -55,7 +56,7 @@ public class Stove : MonoBehaviour
             toolRb.isKinematic = true;
         }
         
-        // Remove interactable so it can't be picked up directly // TODO: what?
+        // Remove interactable so it can't be picked up directly // TODO: both 'Interactable' and 'Holdable' controls whether an item can be picked up or not. This should only be controlled by 'Holdable'
         Interactable interactable = tool.GetComponent<Interactable>();
         if (interactable != null)
         {
@@ -64,13 +65,6 @@ public class Stove : MonoBehaviour
         
         // Connect the tool to this stove
         stoveTool.SetStoveConnection(this, spotIndex);
-        
-        // Start cooking if the tool supports it
-        Pan pan = tool.GetComponent<Pan>();
-        if (pan != null)
-        {
-            pan.SetOnStove(true, this); // TODO: I think the cooking should be made on the stove rather than the pan as the pan is only a tool to store the Cookable
-        }
         
         Debug.Log($"Placed {tool.name} on cooking spot {spotIndex + 1}");
         return true;
@@ -85,6 +79,17 @@ public class Stove : MonoBehaviour
         
         GameObject tool = toolsOnSpots[spotIndex];
         toolsOnSpots[spotIndex] = null;
+
+        // SIMPLIFIED: Two lines for collision restoration
+        CollisionManager.SetCollisionBetweenObjects(tool, gameObject, false);
+        CollisionManager.SetCollisionBetweenObjectAndArray(tool, toolsOnSpots, false);
+
+        // ADDED: Refresh container's internal collision state
+        Container container = tool.GetComponent<Container>();
+        if (container != null)
+        {
+            container.RefreshInternalCollisionState();
+        }
         
         // Disconnect from stove
         StoveTool stoveTool = tool.GetComponent<StoveTool>();
@@ -92,16 +97,6 @@ public class Stove : MonoBehaviour
         {
             stoveTool.ClearStoveConnection();
         }
-        
-        // Stop cooking
-        Pan pan = tool.GetComponent<Pan>();
-        if (pan != null)
-        {
-            pan.SetOnStove(false, null);
-        }
-        
-        // Restore layer
-        SetLayerRecursively(tool, LayerMask.NameToLayer("Default")); // TODO: the objects on the pan should stay as 'PlacedItem'
         
         // Restore interactable
         if (tool.GetComponent<Interactable>() == null)
@@ -171,20 +166,6 @@ public class Stove : MonoBehaviour
         }
         
         return closestSpot;
-    }
-
-    // Helper method to set layer recursively
-    private void SetLayerRecursively(GameObject obj, int newLayer)
-    {
-        if (obj == null) return;
-        
-        obj.layer = newLayer;
-        
-        foreach (Transform child in obj.transform)
-        {
-            if (child == null) continue;
-            SetLayerRecursively(child.gameObject, newLayer);
-        }
     }
 
     public bool HasAvailableSpots()

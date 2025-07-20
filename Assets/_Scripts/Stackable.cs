@@ -6,10 +6,6 @@ public class Stackable : MonoBehaviour
     [Header("Stacking Points")]
     public Transform bottomPoint;  // Where this object's bottom touches other objects
     public Transform topPoint;     // Where other objects should sit on this object
-    
-    [Header("Stacking Settings")]
-    public bool canBeStackedOn = true;      // Can other objects stack on top of this?
-    public bool canStackOnOthers = true;
 
     // Helper methods to get world positions
     public Vector3 GetBottomPosition()

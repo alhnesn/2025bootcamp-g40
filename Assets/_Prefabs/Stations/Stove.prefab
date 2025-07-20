@@ -272,7 +272,7 @@ MonoBehaviour:
   - {fileID: 501883798050486192}
   - {fileID: 2023130775041181888}
   - {fileID: 5373042982585989564}
-  detectionRadius: 0.5
+  detectionRadius: 10
 --- !u!4 &8648318042194111757 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b0d7f264c73217a43ab6ce038da1bed0, type: 3}

@@ -1,247 +1,58 @@
-// TODO: Stove-Pan system
-
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Pan : MonoBehaviour
 {
     [Header("Pan Setup")]
-    public Transform cookingSpot;  // The child object you created (inside point of pan)
+    public Transform cookingSpot;  // This becomes the stacking point
     
-    [Header("Stove Connection")]
-    private bool isOnStove = false;
-    private Stove currentStove = null;
-    
-    // Track what's cooking in the pan
-    private GameObject currentFood = null;
-    private bool isCooking = false;
-    private float currentCookTime = 0f;
+    private Container container;
 
     //------------------------------------------------
 
+    void Start()
+    {
+        container = GetComponent<Container>();
+        if (container == null)
+        {
+            Debug.LogError("Pan requires a Container component!");
+            return;
+        }
+        
+        // Subscribe to events for cooking logic integration
+        container.OnItemAdded += OnFoodAdded;
+        container.OnItemRemoved += OnFoodRemoved;
+    }
+    
+    // Optional wrapper methods
     public bool AddFood(GameObject food)
     {
-        // Only allow one item at a time in the pan
-        if (currentFood != null)
-        {
-            Debug.Log("Pan is already occupied!");
-            return false;
-        }
-        
-        // No restrictions - any item can be put in the pan
-        currentFood = food;
-    
-        // Position the food using its bottom point if it has a Stackable component
-        PositionFoodInPan();
-        
-        currentFood.transform.SetParent(transform);
-        
-        // Set layer to PlacedItem
-        SetLayerRecursively(currentFood, LayerMask.NameToLayer("PlacedItem"));
-        
-        // Make it kinematic so it doesn't fall out
-        Rigidbody foodRb = currentFood.GetComponent<Rigidbody>();
-        if (foodRb != null)
-        {
-            foodRb.isKinematic = true;
-        }
-        
-        // Remove interactable so it can't be picked up directly
-        Interactable interactable = currentFood.GetComponent<Interactable>();
-        if (interactable != null)
-        {
-            Destroy(interactable);
-        }
-        
-        // Start cooking if we're on a stove
-        if (isOnStove)
-        {
-            StartCooking();
-        }
-
-        return true;
+        return container.TryAddItem(food);
     }
-
+    
     public GameObject RemoveFood()
     {
-        if (currentFood == null) return null;
-        
-        GameObject food = currentFood;
-        
-        // Stop cooking
-        StopCooking();
-        
-        // REPLACE complex layer restoration with simple reset:
-        SetLayerRecursively(food, LayerMask.NameToLayer("Default"));
-
-        // Restore interactable component
-        if (food.GetComponent<Interactable>() == null)
-        {
-            food.AddComponent<Interactable>();
-        }
-        
-        // Restore physics
-        Rigidbody foodRb = food.GetComponent<Rigidbody>();
-        if (foodRb != null)
-        {
-            foodRb.isKinematic = false;
-        }
-        
-        food.transform.SetParent(null);
-        currentFood = null;
-        
-        return food;
-    }
-
-    private void PositionFoodInPan()
-    {
-        if (currentFood == null) return;
-        
-        // Try to use bottom point from Stackable component
-        Stackable stackable = currentFood.GetComponent<Stackable>();
-        if (stackable != null && stackable.bottomPoint != null)
-        {
-            // Calculate offset from center to bottom point
-            Vector3 bottomOffset = currentFood.transform.position - stackable.GetBottomPosition();
-            currentFood.transform.position = cookingSpot.position + bottomOffset;
-        }
-        else
-        {
-            // Fallback to center positioning
-            currentFood.transform.position = cookingSpot.position;
-        }
-        
-        currentFood.transform.rotation = cookingSpot.rotation;
-    }
-
-    public void StartCooking()
-    {
-        if (currentFood != null && isOnStove)  // Only cook if on stove
-        {
-            Cookable cookable = currentFood.GetComponent<Cookable>();
-            if (cookable != null && cookable.CanCookFurther())
-            {
-                isCooking = true;
-                currentCookTime = 0f;
-                Debug.Log("Started cooking " + currentFood.name + " (" + cookable.currentCookingState + ")");
-            }
-            else
-            {
-                Debug.Log("This food cannot cook further!");
-            }
-        }
-    }
-    
-    public void StopCooking()
-    {
-        isCooking = false;
-        currentCookTime = 0f;
-        Debug.Log("Stopped cooking");
-    }
-
-    void Update()
-    {
-        if (isCooking && currentFood != null)
-        {
-            Cookable cookable = currentFood.GetComponent<Cookable>();
-            if (cookable != null)
-            {
-                currentCookTime += Time.deltaTime;
-                
-                // Check if food is done cooking to next stage
-                if (currentCookTime >= cookable.GetCurrentCookingTime())
-                {
-                    CookFood();
-                }
-            }
-        }
-    }
-
-    private void CookFood()
-    {
-        if (currentFood == null) return;
-        
-        Cookable cookable = currentFood.GetComponent<Cookable>();
-        if (cookable != null)
-        {
-            GameObject nextStage = cookable.GetNextCookingStage();
-            if (nextStage != null)
-            {
-                // Destroy current food
-                Destroy(currentFood);
-                
-                // Create next stage
-                currentFood = Instantiate(nextStage);
-                currentFood.transform.SetParent(transform);
-                
-                // Position the new food properly
-                PositionFoodInPan();
-
-                SetLayerRecursively(currentFood, LayerMask.NameToLayer("PlacedItem"));
-                
-                // Make it kinematic
-                Rigidbody foodRb = currentFood.GetComponent<Rigidbody>();
-                if (foodRb != null)
-                {
-                    foodRb.isKinematic = true;
-                }
-                
-                // Remove interactable
-                Interactable interactable = currentFood.GetComponent<Interactable>();
-                if (interactable != null)
-                {
-                    Destroy(interactable);
-                }
-                
-                Debug.Log("Food progressed to next cooking stage!");
-                
-                // Continue cooking if it can cook further
-                Cookable newCookable = currentFood.GetComponent<Cookable>();
-                if (newCookable != null && newCookable.CanCookFurther())
-                {
-                    currentCookTime = 0f; // Reset timer for next stage
-                }
-                else
-                {
-                    StopCooking(); // Stop if fully burnt
-                }
-            }
-        }
-    }
-
-    // Helper method to set layer recursively (like in Plate.cs)
-    private void SetLayerRecursively(GameObject obj, int newLayer)
-    {
-        if (obj == null) return;
-        
-        obj.layer = newLayer;
-        
-        foreach (Transform child in obj.transform)
-        {
-            if (child == null) continue;
-            SetLayerRecursively(child.gameObject, newLayer);
-        }
+        return container.TakeTopItem();
     }
     
     public bool HasFood()
     {
-        return currentFood != null;
+        return !container.IsEmpty();
     }
-
-    // NEW: Method for stove to control cooking state
-    public void SetOnStove(bool onStove, Stove stove)
+    
+    public GameObject GetCurrentFood()
     {
-        isOnStove = onStove;
-        currentStove = stove;
-        
-        if (isOnStove && currentFood != null)
-        {
-            StartCooking();
-        }
-        else if (!isOnStove)
-        {
-            StopCooking();
-        }
+        return container.GetTopItem();
     }
-
+    
+    private void OnFoodAdded(GameObject food)
+    {
+        // Hook for future cooking integration
+        Debug.Log($"Food {food.name} added to pan");
+    }
+    
+    private void OnFoodRemoved(GameObject food)
+    {
+        Debug.Log($"Food {food.name} removed from pan");
+    }
 }
