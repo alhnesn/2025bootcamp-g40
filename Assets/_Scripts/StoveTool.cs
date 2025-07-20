@@ -13,6 +13,31 @@ public class StoveTool : MonoBehaviour
     private Stove currentStove = null;
     private int currentCookingSpot = -1;
 
+    // Container reference for cooking integration
+    private Container container;
+
+    
+    void Start()
+    {
+        // Get container component and subscribe to events
+        container = GetComponent<Container>();
+        if (container != null)
+        {
+            container.OnItemAddedToContainer += OnItemAddedToContainer;
+            container.OnItemRemovedFromContainer += OnItemRemovedFromContainer;
+        }
+    }
+    
+    void OnDestroy()
+    {
+        // Unsubscribe from events
+        if (container != null)
+        {
+            container.OnItemAddedToContainer -= OnItemAddedToContainer;
+            container.OnItemRemovedFromContainer -= OnItemRemovedFromContainer;
+        }
+    }
+    
     public void SetLocalStovePlacement()
     {
         if (useCustomPlacement && stovePositionPoint != null)
@@ -51,12 +76,45 @@ public class StoveTool : MonoBehaviour
     {
         currentStove = stove;
         currentCookingSpot = spotIndex;
+
+        // If we already have food when placed on stove, start cooking
+        if (container != null && !container.IsEmpty())
+        {
+            currentStove.NotifyFoodAddedToTool(gameObject);
+        }
     }
 
     public void ClearStoveConnection()
     {
+        // Stop any cooking before disconnecting
+        if (currentStove != null && container != null && !container.IsEmpty())
+        {
+            currentStove.NotifyFoodRemovedFromTool(gameObject);
+        }
+
         currentStove = null;
         currentCookingSpot = -1;
+    }
+
+    // Event handlers for container integration
+    private void OnItemAddedToContainer(GameObject containerObj, GameObject item)
+    {
+        // Only react if this tool is currently on a stove
+        if (IsOnStove())
+        {
+            currentStove.NotifyFoodAddedToTool(gameObject);
+            Debug.Log($"Notified stove that food {item.name} was added to {gameObject.name}");
+        }
+    }
+    
+    private void OnItemRemovedFromContainer(GameObject containerObj, GameObject item)
+    {
+        // Only react if this tool is currently on a stove
+        if (IsOnStove())
+        {
+            currentStove.NotifyFoodRemovedFromTool(gameObject);
+            Debug.Log($"Notified stove that food {item.name} was removed from {gameObject.name}");
+        }
     }
 
     public bool IsOnStove()

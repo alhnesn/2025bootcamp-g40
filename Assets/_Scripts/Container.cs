@@ -14,6 +14,10 @@ public class Container : MonoBehaviour
     public System.Action<GameObject> OnItemAdded;
     public System.Action<GameObject> OnItemRemoved;
 
+    public System.Action<GameObject, GameObject> OnItemAddedToContainer;    // (container, item)
+    public System.Action<GameObject, GameObject> OnItemRemovedFromContainer; // (container, item)
+
+
     /// <summary>
     /// Add item to top of stack
     /// </summary>
@@ -45,6 +49,7 @@ public class Container : MonoBehaviour
         
         // Notify
         OnItemAdded?.Invoke(item);
+        OnItemAddedToContainer?.Invoke(gameObject, item);  // NEW
         
         return true;
     }
@@ -88,6 +93,7 @@ public class Container : MonoBehaviour
         
         // Notify
         OnItemRemoved?.Invoke(topItem);
+        OnItemRemovedFromContainer?.Invoke(gameObject, topItem);  // NEW
         
         return topItem;
     }

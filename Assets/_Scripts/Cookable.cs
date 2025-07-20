@@ -19,7 +19,7 @@ public class Cookable : MonoBehaviour
     }
 
     // Get the cooking time for the current stage
-    public float GetCurrentCookingTime()
+    public float GetCurrentCookingTime() // TODO: might rename this bcs it's confusing
     {
         return nextTime;
     }

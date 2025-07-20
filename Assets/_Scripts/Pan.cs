@@ -19,31 +19,16 @@ public class Pan : MonoBehaviour
             return;
         }
         
-        // Subscribe to events for cooking logic integration
-        container.OnItemAdded += OnFoodAdded;
-        container.OnItemRemoved += OnFoodRemoved;
+        // // Subscribe to events for cooking logic integration
+        // container.OnItemAdded += OnFoodAdded;
+        // container.OnItemRemoved += OnFoodRemoved;
     }
     
     // Optional wrapper methods
-    public bool AddFood(GameObject food)
-    {
-        return container.TryAddItem(food);
-    }
-    
-    public GameObject RemoveFood()
-    {
-        return container.TakeTopItem();
-    }
-    
-    public bool HasFood()
-    {
-        return !container.IsEmpty();
-    }
-    
-    public GameObject GetCurrentFood()
-    {
-        return container.GetTopItem();
-    }
+    public bool AddFood(GameObject food) => container.TryAddItem(food);
+    public GameObject RemoveFood() => container.TakeTopItem();
+    public bool HasFood() => !container.IsEmpty();
+    public GameObject GetCurrentFood() => container.GetTopItem();
     
     private void OnFoodAdded(GameObject food)
     {
