@@ -9,3 +9,6 @@ FIXED:
 
 FIXED?:
 - sometimes can't take back pan after the food on it is cooked.
+
+TO-DO:
+- when object placed on CookingPoint, the item on the stove should be highlighted instead of the CookingPoint

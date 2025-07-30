@@ -142,6 +142,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8bf34c954a0fb1449a94735c679e41a5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 317609978556641964}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8bf34c954a0fb1449a94735c679e41a5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2343880454541940247}
   m_SourcePrefab: {fileID: 100100000, guid: 8bf34c954a0fb1449a94735c679e41a5, type: 3}
 --- !u!4 &5025492009747957586 stripped
 Transform:
@@ -165,6 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4647eda5b46d2ec45946427faf1327df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useOutlineHighlight: 1
 --- !u!114 &6031180547591291111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,8 +198,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bottomPoint: {fileID: 6281940403397409425}
   topPoint: {fileID: 5618617943054976476}
-  canBeStackedOn: 1
-  canStackOnOthers: 1
 --- !u!54 &-7807479837104618610
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -260,3 +262,24 @@ MonoBehaviour:
   holdPositionPoint: {fileID: 0}
   holdRotationPoint: {fileID: 0}
   useCustomHolding: 1
+--- !u!114 &2343880454541940247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5689720850482666984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee31cb428271f3348a923bc503e06fb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resultingPieces:
+  - prefab: {fileID: 1423571343637387031, guid: 493b71678353953469f66a28f1c2a7e0, type: 3}
+    pieceName: TomatoSlice
+  - prefab: {fileID: 1423571343637387031, guid: 493b71678353953469f66a28f1c2a7e0, type: 3}
+    pieceName: TomatoSlice
+  - prefab: {fileID: 1423571343637387031, guid: 493b71678353953469f66a28f1c2a7e0, type: 3}
+    pieceName: TomatoSlice
+  useCustomPlacement: 0
+  customPositions: []
