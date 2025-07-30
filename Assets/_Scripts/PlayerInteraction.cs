@@ -17,12 +17,18 @@ public class PlayerInteraction : MonoBehaviour
 
     // Store disabled colliders to re-enable them later
     private List<Collider> disabledColliders = new List<Collider>();
+
+    // NEW: Simple highlighting tracking
+    private Interactable currentlyHighlighted = null;
     
     
     void Update()
     {
         Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
         RaycastHit hitInfo;
+
+        // Handle highlighting first
+        HandleHighlighting(ray, out hitInfo);
 
         if (Physics.Raycast(ray, out hitInfo, interactionDistance, interactableLayers))
         {
@@ -40,10 +46,10 @@ public class PlayerInteraction : MonoBehaviour
                     return;
                 }
                 
-                Stove stove = hitInfo.collider.GetComponent<Stove>();
-                if (stove != null && Input.GetMouseButtonDown(0))
+                CookingSpot cookingSpot = hitInfo.collider.GetComponent<CookingSpot>();
+                if (cookingSpot != null && Input.GetMouseButtonDown(0))
                 {
-                    if (stove.PlaceTool(heldItem))
+                    if (cookingSpot.PlaceTool(heldItem))
                     {
                         heldItem = null;
                         heldItemRb = null;
@@ -76,14 +82,15 @@ public class PlayerInteraction : MonoBehaviour
                     }
                 }
 
-                Stove stove = hitInfo.collider.GetComponent<Stove>();
-                if (stove != null && Input.GetMouseButtonDown(0))
+                CookingSpot cookingSpot = hitInfo.collider.GetComponent<CookingSpot>();
+                if (cookingSpot != null && Input.GetMouseButtonDown(0))
                 {
-                    GameObject tool = stove.RemoveToolFromPosition(hitInfo.point);
+                    GameObject tool = cookingSpot.RemoveTool();
                     if (tool != null)
                     {
                         PickupItem(tool);
                     }
+                    return;
                 }
 
                 else if (hitInfo.collider.GetComponent<Interactable>() != null)
@@ -189,6 +196,67 @@ public class PlayerInteraction : MonoBehaviour
         
         // Clear the list
         disabledColliders.Clear();
+    }
+
+    // SIMPLIFIED: Much cleaner highlighting
+    private void HandleHighlighting(Ray ray, out RaycastHit hitInfo)
+    {
+        if (Physics.Raycast(ray, out hitInfo, interactionDistance, interactableLayers))
+        {
+            GameObject hitObject = hitInfo.collider.gameObject;
+            Interactable interactable = GetInteractableComponent(hitObject);
+            
+            if (interactable != null && interactable != currentlyHighlighted)
+            {
+                // Remove previous highlight
+                if (currentlyHighlighted != null)
+                {
+                    currentlyHighlighted.StopHighlight();
+                }
+                
+                // Add new highlight
+                currentlyHighlighted = interactable;
+                currentlyHighlighted.StartHighlight();
+            } // TODO: I think there is a bug here
+        }
+        else
+        {
+            // Not looking at anything interactable
+            if (currentlyHighlighted != null)
+            {
+                currentlyHighlighted.StopHighlight();
+                currentlyHighlighted = null;
+            }
+        }
+    }
+
+    private Interactable GetInteractableComponent(GameObject obj) // TODO: this probably doesn't work like how I want it
+    {
+        // Check the object itself
+        Interactable interactable = obj.GetComponent<Interactable>();
+        if (interactable != null) return interactable;
+        
+        // Check parents for Container, Stove, etc. that should be interactable
+        Transform current = obj.transform;
+        while (current != null)
+        {
+            // Check for components that make an object interactable
+            if (current.GetComponent<Container>() != null || 
+                current.GetComponent<Stove>() != null || 
+                current.GetComponent<CuttingBoard>() != null)
+            {
+                // These should have Interactable components, add if missing
+                interactable = current.GetComponent<Interactable>();
+                if (interactable == null)
+                {
+                    interactable = current.gameObject.AddComponent<Interactable>();
+                }
+                return interactable;
+            }
+            current = current.parent;
+        }
+        
+        return null;
     }
 
 
