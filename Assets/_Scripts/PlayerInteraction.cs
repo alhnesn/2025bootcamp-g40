@@ -232,27 +232,16 @@ public class PlayerInteraction : MonoBehaviour
 
     private Interactable GetInteractableComponent(GameObject obj) // TODO: this probably doesn't work like how I want it
     {
-        // Check the object itself
+        // Check the object itself first
         Interactable interactable = obj.GetComponent<Interactable>();
         if (interactable != null) return interactable;
         
-        // Check parents for Container, Stove, etc. that should be interactable
-        Transform current = obj.transform;
+        // Check parents (for cases where you hit a child collider)
+        Transform current = obj.transform.parent;
         while (current != null)
         {
-            // Check for components that make an object interactable
-            if (current.GetComponent<Container>() != null || 
-                current.GetComponent<Stove>() != null || 
-                current.GetComponent<CuttingBoard>() != null)
-            {
-                // These should have Interactable components, add if missing
-                interactable = current.GetComponent<Interactable>();
-                if (interactable == null)
-                {
-                    interactable = current.gameObject.AddComponent<Interactable>();
-                }
-                return interactable;
-            }
+            interactable = current.GetComponent<Interactable>();
+            if (interactable != null) return interactable;
             current = current.parent;
         }
         
