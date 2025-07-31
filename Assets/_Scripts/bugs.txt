@@ -1,5 +1,6 @@
 1- objects on plate block picking up the plate (because we removed the PlacedItem layer thingy)
 2- when crosshair is off an object, most of the times it doesn't remove highlight.
+3- when an object is added to a pan ontop of the stove (or attempted to add to the pan), you can not remove the pan
 
 fix the bugs and TODOs in stove
 

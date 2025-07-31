@@ -45,7 +45,6 @@ public class CookingSpot : MonoBehaviour
         
         // Collision management
         CollisionManager.SetCollisionBetweenObjects(tool, gameObject, true);
-        // TODO: we should also disable collission between the cooking spots (there is no problem for now, it works ok)
 
         // Make kinematic and remove interactable
         Rigidbody toolRb = tool.GetComponent<Rigidbody>();

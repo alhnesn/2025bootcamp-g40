@@ -57,17 +57,18 @@ public class PlayerInteraction : MonoBehaviour
                     return;
                 }
 
+                CuttingBoard cuttingBoard = hitInfo.collider.GetComponent<CuttingBoard>();
+                if (cuttingBoard != null && Input.GetMouseButtonDown(0))
+                {
+                    cuttingBoard.Process(this);
+                    return;
+                }
+
+
                 // Check for stations or drop
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    if (hitInfo.collider.GetComponent<CuttingBoard>() != null)
-                    {
-                        hitInfo.collider.GetComponent<CuttingBoard>().Process(this);
-                    }
-                    else
-                    {
-                        DropItem();
-                    }
+                    DropItem();
                 }
             }
             else // HANDS EMPTY
@@ -217,7 +218,7 @@ public class PlayerInteraction : MonoBehaviour
                 // Add new highlight
                 currentlyHighlighted = interactable;
                 currentlyHighlighted.StartHighlight();
-            } // TODO: I think there is a bug here
+            }
         }
         else
         {
@@ -230,7 +231,7 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
-    private Interactable GetInteractableComponent(GameObject obj) // TODO: this probably doesn't work like how I want it
+    private Interactable GetInteractableComponent(GameObject obj)
     {
         // Check the object itself first
         Interactable interactable = obj.GetComponent<Interactable>();

@@ -8,7 +8,5 @@ public class Ingredient : MonoBehaviour
 {
     public string ingredientName;
     public IngredientState currentState;
-
-    // This will hold the "Chopped" version of this ingredient.
     public GameObject processedPrefab;
 }
