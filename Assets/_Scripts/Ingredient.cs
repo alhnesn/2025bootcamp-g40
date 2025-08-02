@@ -8,5 +8,4 @@ public class Ingredient : MonoBehaviour
 {
     public string ingredientName;
     public IngredientState currentState;
-    public GameObject processedPrefab;
 }

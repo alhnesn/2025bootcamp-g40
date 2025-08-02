@@ -118,21 +118,34 @@ public class Container : MonoBehaviour
     private float CalculateStackHeight(GameObject excludeItem = null)
     {
         float totalHeight = 0f;
-        
+
         foreach (GameObject item in itemStack)
         {
             if (item == excludeItem) break;  // Stop before this item
-            
+
             if (item != null)
             {
-                Renderer renderer = item.GetComponent<Renderer>();
-                if (renderer != null)
+                Stackable stackable = item.GetComponent<Stackable>();
+                if (stackable != null && stackable.bottomPoint != null && stackable.topPoint != null)
                 {
-                    totalHeight += renderer.bounds.size.y;
+                    float itemHeight = Vector3.Distance(
+                        stackable.bottomPoint.position,
+                        stackable.topPoint.position
+                    );
+                    totalHeight += itemHeight;
+                }
+                else
+                {
+                    // Fallback: use renderer bounds if Stackable or points are missing
+                    Renderer renderer = item.GetComponent<Renderer>();
+                    if (renderer != null)
+                    {
+                        totalHeight += renderer.bounds.size.y;
+                    }
                 }
             }
         }
-        
+
         return totalHeight;
     }
 
