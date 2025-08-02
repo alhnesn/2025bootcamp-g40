@@ -64,6 +64,21 @@ public class PlayerInteraction : MonoBehaviour
                     return;
                 }
 
+                Customer customer = hitInfo.collider.GetComponent<Customer>();
+                if (customer != null && Input.GetMouseButtonDown(0))
+                {
+                    if (customer.HasActiveOrder())
+                    {
+                        float score = customer.DeliverOrder(heldItem);
+                        // The customer will evaluate the order
+                        // You could show score feedback here
+                        
+                        heldItem = null;
+                        heldItemRb = null;
+                    }
+                    return;
+                }
+
 
                 // Check for stations or drop
                 if (Input.GetKeyDown(KeyCode.E))
