@@ -194,7 +194,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ingredientName: CheeseSliced
   currentState: 1
-  processedPrefab: {fileID: 0}
+  price: 2
+  preparationTime: 7
 --- !u!64 &5191820788478129831
 MeshCollider:
   m_ObjectHideFlags: 0

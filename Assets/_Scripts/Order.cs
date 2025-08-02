@@ -11,18 +11,23 @@ public enum OrderType
 
 public abstract class Order
 {
+    [Header("Basic Info")]
     public OrderType orderType;
     public string customerName;
-    public float timeLimit = 60f;  // Time limit in seconds
+    public float timeLimit;
+    public float totalPrice;
     
-    // Scoring weights (can be overridden by specific order types)
-    public float unwantedIngredientPenalty = -20f;
-    public float missingIngredientPenalty = -10f;
-    public float wrongOrderPenalty = -5f;
-    public float perfectBonus = 50f;
+    [Header("Scoring System (0-100)")]
+    public float extraIngredientPenalty = -50f;
+    public float missingIngredientPenalty = -30f;
+    public float wrongOrderPenalty = -20f;
+    public float perfectOrderScore = 90f;
+    public float earlyDeliveryBonus = 10f;
     
     public abstract void GenerateRandomOrder();
     public abstract float EvaluateOrder(GameObject deliveredPlate);
     public abstract string GetOrderDescription();
     public abstract List<string> GetRequiredIngredients();
+    public abstract float CalculateTotalPrice();
+    public abstract float CalculateTotalTime();
 }

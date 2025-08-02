@@ -349,6 +349,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1713488979}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!1 &285499557
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 285499559}
+  - component: {fileID: 285499558}
+  m_Layer: 0
+  m_Name: IngredientDatabaseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &285499558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285499557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0def19addb1be514ea7f29e04a85193d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  database: {fileID: 11400000, guid: 92b6d0b2876945e459aee1a7e2727ab7, type: 2}
+--- !u!4 &285499559
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285499557}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.606, y: 1.162, z: -8.69}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &357566393
 GameObject:
   m_ObjectHideFlags: 0
@@ -2107,7 +2152,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4186087090097831501, guid: e2e0fd4429caec147a7ab7b959068694, type: 3}
       propertyPath: m_Name
-      value: UncookedBurger
+      value: BurgerUncooked
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2238,7 +2283,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3789912664882031666, guid: 45a975c01b910f24c9bd90ed78078a94, type: 3}
       propertyPath: m_Name
-      value: CookedBurger
+      value: BurgerCooked
       objectReference: {fileID: 0}
     - target: {fileID: 4599206362587362952, guid: 45a975c01b910f24c9bd90ed78078a94, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2369,4 +2414,5 @@ SceneRoots:
   - {fileID: 3575224580419694087}
   - {fileID: 2186249064744923545}
   - {fileID: 4634869051822976401}
+  - {fileID: 285499559}
   - {fileID: 1921472357}

@@ -5,66 +5,86 @@ using UnityEngine;
 
 public class HamburgerOrder : Order
 {
-    [Header("Hamburger Specific")]
+    [Header("Hamburger Generation Settings")]
+    public int minBurgers = 1;
+    public int maxBurgers = 3;
+    public int minExtraPerSpace = 0;
+    public int maxExtraPerSpace = 2;
+    
+    [Header("Hamburger Order")]
     public List<string> requiredIngredients = new List<string>(); // Bottom to top
     
-    // Available ingredients for hamburger generation
-    private static readonly string[] availableIngredients = {
-        "BunBottom",
-        "BurgerCooked",
-        "LettuceSliced", 
-        "TomatoSliced",
+    // Extra ingredients that can be added between burgers/buns
+    private static readonly string[] extraIngredients = {
+        "LettuceSliced",
+        "TomatoSliced", 
         "OnionSliced",
-        "CheeseSliced",
-        "BunTop"
+        "CheeseSliced"
     };
     
-    // Mandatory ingredients (always included)
-    private static readonly string[] mandatoryIngredients = {
-        "BunBottom",
-        "BurgerCooked", 
-        "BunTop"
-    };
-    
-
     public HamburgerOrder()
     {
         orderType = OrderType.Hamburger;
     }
     
-    public override void GenerateRandomOrder() // TODO: need real big overhaul for this
+    public override void GenerateRandomOrder()
     {
         requiredIngredients.Clear();
         
-        // Always start with bottom bun
+        // Step 1: Add bottom bun
         requiredIngredients.Add("BunBottom");
         
-        // Add burger patty (always included)
-        requiredIngredients.Add("BurgerCooked");
+        // Step 2: Determine number of burgers
+        int burgerCount = Random.Range(minBurgers, maxBurgers + 1);
+        Debug.Log($"Generating order with {burgerCount} burgers");
         
-        // Randomly add optional ingredients
-        List<string> optionalIngredients = new List<string> { 
-            "LettuceSliced", "TomatoSliced", "OnionSliced" 
-        };
+        // Step 3: Create spaces and add ingredients
+        // Number of spaces = burgerCount + 1 (before first burger, between burgers, after last burger)
+        int spaceCount = burgerCount + 1;
         
-        // Shuffle and pick 1-3 optional ingredients
-        optionalIngredients = optionalIngredients.OrderBy(x => Random.Range(0f, 1f)).ToList();
-        int ingredientCount = Random.Range(1, 4); // 1 to 3 optional ingredients
-        
-        for (int i = 0; i < ingredientCount && i < optionalIngredients.Count; i++)
+        for (int space = 0; space < spaceCount; space++)
         {
-            requiredIngredients.Add(optionalIngredients[i]);
+            // Add extra ingredients to this space
+            AddExtrasToSpace(space);
+            
+            // Add burger after this space (except for the last space)
+            if (space < spaceCount - 1)
+            {
+                requiredIngredients.Add("BurgerCooked");
+            }
         }
         
-        // Always end with top bun
+        // Step 4: Add top bun
         requiredIngredients.Add("BunTop");
         
-        Debug.Log($"Generated hamburger order: {string.Join(" > ", requiredIngredients)}");
+        // Calculate time and price
+        timeLimit = CalculateTotalTime();
+        totalPrice = CalculateTotalPrice();
+        
+        Debug.Log($"Generated hamburger order: {string.Join(" → ", requiredIngredients)}");
+        Debug.Log($"Time limit: {timeLimit}s, Total price: ${totalPrice:F2}");
+    }
+
+    private void AddExtrasToSpace(int spaceIndex)
+    {
+        // Determine how many extra ingredients for this space
+        int extraCount = Random.Range(minExtraPerSpace, maxExtraPerSpace + 1);
+        
+        if (extraCount == 0) return;
+        
+        Debug.Log($"Adding {extraCount} extra ingredients to space {spaceIndex}");
+        
+        // Randomly select extra ingredients (with duplicates allowed)
+        for (int i = 0; i < extraCount; i++)
+        {
+            string randomExtra = extraIngredients[Random.Range(0, extraIngredients.Length)];
+            requiredIngredients.Add(randomExtra);
+            Debug.Log($"  Added {randomExtra} to space {spaceIndex}");
+        }
     }
 
     public override float EvaluateOrder(GameObject deliveredPlate)
     {
-        // Get ingredients from the delivered plate (bottom to top)
         List<string> deliveredIngredients = GetIngredientsFromPlate(deliveredPlate);
         
         if (deliveredIngredients.Count == 0)
@@ -73,14 +93,13 @@ public class HamburgerOrder : Order
             return 0f;
         }
         
-        float score = 0f;
+        float score = perfectOrderScore; // Start with perfect score
         
         // Check for perfect match first
         if (IngredientsMatch(deliveredIngredients, requiredIngredients))
         {
-            score = perfectBonus;
-            Debug.Log($"Perfect hamburger! Score: {score}");
-            return score;
+            Debug.Log($"Perfect hamburger! Base score: {score}");
+            return score; // Early delivery bonus will be added in Customer.cs
         }
         
         // Calculate penalties
@@ -88,8 +107,8 @@ public class HamburgerOrder : Order
         score += CalculateMissingIngredientPenalty(deliveredIngredients);
         score += CalculateWrongOrderPenalty(deliveredIngredients);
         
-        // Ensure minimum score of 0
-        score = Mathf.Max(0f, score);
+        // Ensure score is between 0-100
+        score = Mathf.Clamp(score, 0f, 100f);
         
         Debug.Log($"Hamburger evaluation - Required: [{string.Join(", ", requiredIngredients)}]");
         Debug.Log($"Delivered: [{string.Join(", ", deliveredIngredients)}] - Score: {score}");
@@ -117,7 +136,12 @@ public class HamburgerOrder : Order
             Ingredient ingredient = item.GetComponent<Ingredient>();
             if (ingredient != null)
             {
+                // FIXED: Use ingredient component's name, not GameObject name
                 ingredients.Add(ingredient.ingredientName);
+            }
+            else
+            {
+                Debug.LogWarning($"Item {item.name} on plate has no Ingredient component!");
             }
         }
         
@@ -139,13 +163,18 @@ public class HamburgerOrder : Order
     private float CalculateUnwantedIngredientPenalty(List<string> delivered)
     {
         float penalty = 0f;
+        List<string> requiredCopy = new List<string>(requiredIngredients);
         
         foreach (string ingredient in delivered)
         {
-            if (!requiredIngredients.Contains(ingredient))
+            if (requiredCopy.Contains(ingredient))
             {
-                penalty += unwantedIngredientPenalty;
-                Debug.Log($"Unwanted ingredient: {ingredient} (Penalty: {unwantedIngredientPenalty})");
+                requiredCopy.Remove(ingredient); // Remove one instance
+            }
+            else
+            {
+                penalty += extraIngredientPenalty;
+                Debug.Log($"Extra ingredient: {ingredient} (Penalty: {extraIngredientPenalty})");
             }
         }
         
@@ -155,10 +184,15 @@ public class HamburgerOrder : Order
     private float CalculateMissingIngredientPenalty(List<string> delivered)
     {
         float penalty = 0f;
+        List<string> deliveredCopy = new List<string>(delivered);
         
         foreach (string ingredient in requiredIngredients)
         {
-            if (!delivered.Contains(ingredient))
+            if (deliveredCopy.Contains(ingredient))
+            {
+                deliveredCopy.Remove(ingredient); // Remove one instance
+            }
+            else
             {
                 penalty += missingIngredientPenalty;
                 Debug.Log($"Missing ingredient: {ingredient} (Penalty: {missingIngredientPenalty})");
@@ -172,43 +206,45 @@ public class HamburgerOrder : Order
     {
         float penalty = 0f;
         
-        // Only check order for ingredients that are present in both lists
-        List<string> commonIngredients = delivered.Intersect(requiredIngredients).ToList();
+        // Simple order checking: for each position, check if it matches
+        int minLength = Mathf.Min(delivered.Count, requiredIngredients.Count);
         
-        // Track positions in both lists
-        for (int i = 0; i < commonIngredients.Count; i++)
+        for (int i = 0; i < minLength; i++)
         {
-            string ingredient = commonIngredients[i];
-            
-            int deliveredIndex = delivered.IndexOf(ingredient);
-            int requiredIndex = requiredIngredients.IndexOf(ingredient);
-            
-            // If ingredient exists in both but in different relative positions
-            bool isInWrongOrder = false;
-            
-            // Check if the relative order is maintained
-            for (int j = i + 1; j < commonIngredients.Count; j++)
-            {
-                string nextIngredient = commonIngredients[j];
-                int nextDeliveredIndex = delivered.IndexOf(nextIngredient);
-                int nextRequiredIndex = requiredIngredients.IndexOf(nextIngredient);
-                
-                // If the order relationship is flipped
-                if ((deliveredIndex < nextDeliveredIndex) != (requiredIndex < nextRequiredIndex))
-                {
-                    isInWrongOrder = true;
-                    break;
-                }
-            }
-            
-            if (isInWrongOrder)
+            if (delivered[i] != requiredIngredients[i])
             {
                 penalty += wrongOrderPenalty;
-                Debug.Log($"Wrong order for ingredient: {ingredient} (Penalty: {wrongOrderPenalty})");
+                Debug.Log($"Wrong order at position {i}: expected {requiredIngredients[i]}, got {delivered[i]} (Penalty: {wrongOrderPenalty})");
             }
         }
         
         return penalty;
+    }
+
+    public override float CalculateTotalPrice()
+    {
+        float total = 0f;
+    
+        foreach (string ingredientName in requiredIngredients)
+        {
+            // FIXED: Use database instead of hardcoded values
+            total += IngredientDatabaseManager.GetIngredientPrice(ingredientName);
+        }
+        
+        return total;
+    }
+
+    public override float CalculateTotalTime()
+    {
+        float total = 0f;
+    
+        foreach (string ingredientName in requiredIngredients)
+        {
+            // FIXED: Use database instead of hardcoded values
+            total += IngredientDatabaseManager.GetIngredientTime(ingredientName);
+        }
+        
+        return total;
     }
 
     public override string GetOrderDescription()

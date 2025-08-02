@@ -165,7 +165,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ingredientName: CookedBurger
   currentState: 2
-  processedPrefab: {fileID: 0}
+  price: 3
+  preparationTime: 13
 --- !u!54 &3692600897260210942
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -227,6 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4647eda5b46d2ec45946427faf1327df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useOutlineHighlight: 1
 --- !u!114 &7068024197983265422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,8 +243,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bottomPoint: {fileID: 7067900834877080762}
   topPoint: {fileID: 3024675891532412713}
-  canBeStackedOn: 1
-  canStackOnOthers: 1
 --- !u!114 &8267286290907453782
 MonoBehaviour:
   m_ObjectHideFlags: 0

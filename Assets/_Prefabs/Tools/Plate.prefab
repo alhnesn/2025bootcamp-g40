@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4647eda5b46d2ec45946427faf1327df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useOutlineHighlight: 1
 --- !u!54 &9200485058956722539
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -218,7 +219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa4eadfbc72cadb43b5b3a18f58301b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxItems: 6
+  maxItems: 15
   stackingPoint: {fileID: 4519228291510995760}
 --- !u!4 &979835292131317753 stripped
 Transform:

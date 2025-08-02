@@ -8,4 +8,9 @@ public class Ingredient : MonoBehaviour
 {
     public string ingredientName;
     public IngredientState currentState;
+
+    [Header("Order System")]
+    public float price = 1.0f;           // Price for this ingredient
+    public float preparationTime = 5.0f; // Time needed to prepare this ingredient
+    
 }

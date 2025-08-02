@@ -175,7 +175,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ingredientName: OnionSliced
   currentState: 1
-  processedPrefab: {fileID: 0}
+  price: 1
+  preparationTime: 7
 --- !u!114 &8500925335251190334
 MonoBehaviour:
   m_ObjectHideFlags: 0

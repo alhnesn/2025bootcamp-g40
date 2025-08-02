@@ -73,8 +73,8 @@ public class PlayerInteraction : MonoBehaviour
                         // The customer will evaluate the order
                         // You could show score feedback here
                         
-                        heldItem = null;
-                        heldItemRb = null;
+                        // heldItem = null;
+                        // heldItemRb = null;
                     }
                     return;
                 }

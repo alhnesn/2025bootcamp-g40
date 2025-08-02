@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class Customer : MonoBehaviour
 {
@@ -51,7 +52,7 @@ public class Customer : MonoBehaviour
         Debug.Log($"{customerName} ordered: {currentOrder.GetOrderDescription()}");
     }
 
-    public float DeliverOrder(GameObject deliveredPlate) // TODO: empty the plate
+    public float DeliverOrder(GameObject deliveredPlate)
     {
         if (!hasActiveOrder || currentOrder == null)
         {
@@ -61,60 +62,73 @@ public class Customer : MonoBehaviour
         
         float score = currentOrder.EvaluateOrder(deliveredPlate);
         
-        // Time bonus/penalty
-        float timeBonus = CalculateTimeBonus();
-        score += timeBonus;
+        // Early delivery bonus
+        float timeRatio = orderTimer / currentOrder.timeLimit;
+        if (timeRatio < 0.5f) // Delivered in first half of time
+        {
+            score += currentOrder.earlyDeliveryBonus;
+            Debug.Log($"Early delivery bonus: +{currentOrder.earlyDeliveryBonus}");
+        }
+        
+        // Ensure score is 0-100
+        score = Mathf.Clamp(score, 0f, 100f);
+        
+        // Calculate payment based on score
+        float payment = (score / 100f) * currentOrder.totalPrice;
         
         totalScore += score;
+    
+        // Empty the plate - destroy all ingredients
+        EmptyPlate(deliveredPlate);
+        
+        Debug.Log($"Order delivered! Score: {score}/100, Payment: ${payment:F2} (Full price: ${currentOrder.totalPrice:F2})");
+        Debug.Log($"Total score: {totalScore}");
         
         // Complete the order
         hasActiveOrder = false;
         
-        Debug.Log($"Order delivered! Score: {score} (Time bonus: {timeBonus}) - Total score: {totalScore}");
-        
         UpdateScoreDisplay();
         
-        // Generate new order after a delay
-        Invoke(nameof(GenerateNewOrder), 3f); // TODO: make him leave the restaurant
+        // Destroy customer after 5 seconds
+        Destroy(gameObject, 5f);
         
-        return score;
+        return payment; // Return payment instead of score
     }
 
-    private float CalculateTimeBonus()
+    private void EmptyPlate(GameObject plate)
     {
-        if (currentOrder == null) return 0f;
+        Container container = plate.GetComponent<Container>();
+        if (container == null) return;
         
-        float timeRatio = orderTimer / currentOrder.timeLimit;
-        
-        if (timeRatio < 0.5f) // Delivered in first half of time
+        // Get all items and destroy them
+        List<GameObject> items = container.GetAllItems();
+        foreach (GameObject item in items)
         {
-            return 10f; // Time bonus
-        }
-        else if (timeRatio > 1.0f) // Delivered late
-        {
-            return -5f; // Time penalty
+            container.TakeTopItem(); // Remove from container
+            Destroy(item); // Destroy the ingredient
         }
         
-        return 0f; // No bonus or penalty
+        Debug.Log("Plate emptied - all ingredients destroyed");
     }
 
     private void UpdateOrderTimer()
     {
         orderTimer += Time.deltaTime;
-        
+    
         if (timerText != null)
         {
             float remainingTime = Mathf.Max(0f, currentOrder.timeLimit - orderTimer);
             timerText.text = $"Time: {remainingTime:F1}s";
         }
         
-        // Check if time is up
+        // Check if time is up - customer leaves
         if (orderTimer >= currentOrder.timeLimit)
         {
-            Debug.Log($"{customerName}'s order timed out!");
+            Debug.Log($"{customerName}'s order timed out! Customer is leaving.");
             hasActiveOrder = false;
-            // Generate new order after timeout
-            Invoke(nameof(GenerateNewOrder), 2f); // TODO: make him leave the restaurant
+            
+            // Customer leaves immediately (destroy)
+            Destroy(gameObject, 1f);
         }
     }
     

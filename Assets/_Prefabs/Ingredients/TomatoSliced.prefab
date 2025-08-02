@@ -160,6 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4647eda5b46d2ec45946427faf1327df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useOutlineHighlight: 1
 --- !u!114 &5497029763283061635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,8 +175,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bottomPoint: {fileID: 3374561975590128764}
   topPoint: {fileID: 2373521857441660163}
-  canBeStackedOn: 1
-  canStackOnOthers: 1
 --- !u!114 &160069438732883447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,7 +189,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ingredientName: TomatoSliced
   currentState: 1
-  processedPrefab: {fileID: 0}
+  price: 1
+  preparationTime: 7
 --- !u!64 &8827688339197162758
 MeshCollider:
   m_ObjectHideFlags: 0
