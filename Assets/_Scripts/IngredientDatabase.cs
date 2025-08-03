@@ -117,6 +117,18 @@ public class IngredientDatabase : ScriptableObject
         if (ingredientLookup == null) BuildLookupCache();
         return new List<string>(ingredientLookup.Keys);
     }
+
+    public Sprite GetThumbnail(string ingredientName)
+    {
+        if (ingredientLookup == null) BuildLookupCache();
+        
+        if (ingredientLookup.TryGetValue(ingredientName, out IngredientData data))
+        {
+            return data.component.thumbnailSprite;
+        }
+        
+        return null;
+    }
     
     // Validation method for editor
     [ContextMenu("Validate Database")]

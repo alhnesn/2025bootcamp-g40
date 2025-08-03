@@ -163,10 +163,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e934caf581a33044b516cd96128bfe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ingredientName: CookedBurger
+  ingredientName: BurgerCooked
   currentState: 2
   price: 3
   preparationTime: 13
+  thumbnailSprite: {fileID: 21300000, guid: d3963cec862ae4943ab221f471f2beeb, type: 3}
 --- !u!54 &3692600897260210942
 Rigidbody:
   m_ObjectHideFlags: 0

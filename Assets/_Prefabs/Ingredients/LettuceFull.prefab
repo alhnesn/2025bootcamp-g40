@@ -183,6 +183,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ingredientName: LettuceFull
   currentState: 0
+  price: 1
+  preparationTime: 5
+  thumbnailSprite: {fileID: 21300000, guid: ec5b21396be0278439cf37574745b809, type: 3}
 --- !u!114 &8596878851444479371
 MonoBehaviour:
   m_ObjectHideFlags: 0

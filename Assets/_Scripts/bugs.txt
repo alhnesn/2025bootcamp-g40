@@ -14,3 +14,4 @@ FIXED?:
 TO-DO:
 - when object placed on CookingPoint, the item on the stove should be highlighted instead of the CookingPoint
 - CheeseFull icin adam akilli holding point belirle
+- adjust the penalties so the score isn't 0 all the time.
