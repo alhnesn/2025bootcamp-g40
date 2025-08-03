@@ -7,6 +7,9 @@ public class Customer : MonoBehaviour
     [Header("Customer Settings")]
     public string customerName = "Customer";
     public float orderTimeLimit = 120f; // 2 minutes default
+
+    [Header("Customer Identity")]
+    [SerializeField] private string[] possibleNames = {"Customer"};
     
     // Current order
     private Order currentOrder = null;
@@ -19,6 +22,7 @@ public class Customer : MonoBehaviour
 
     void Start()
     {
+        SetRandomName();
         Debug.Log($"{customerName} is waiting for order to be taken");
     }
     
@@ -27,6 +31,19 @@ public class Customer : MonoBehaviour
         if (hasActiveOrder)
         {
             UpdateOrderTimer();
+        }
+    }
+
+    /// <summary>
+    /// Called by CustomerManager when customer arrives at window
+    /// </summary>
+    public void OnArrivedAtWindow()
+    {
+        // Auto-generate order when arriving at window
+        if (!hasActiveOrder)
+        {
+            // GenerateNewOrder();
+            Debug.Log($"{customerName} has arrived and is ready to order!");
         }
     }
 
@@ -53,6 +70,24 @@ public class Customer : MonoBehaviour
         
         Debug.Log("Found OrderUIController, calling ShowOrder()");
         orderUI.ShowOrder(currentOrder);
+    }
+
+    // Add this method:
+    /// <summary>
+    /// Set a random name from the possible names list
+    /// </summary>
+    private void SetRandomName()
+    {
+        if (possibleNames != null && possibleNames.Length > 0)
+        {
+            customerName = possibleNames[Random.Range(0, possibleNames.Length)];
+        }
+        else
+        {
+            customerName = "Customer"; // Fallback name
+        }
+        
+        Debug.Log($"Customer name set to: {customerName}");
     }
 
     public void GenerateNewOrder()
@@ -145,8 +180,11 @@ public class Customer : MonoBehaviour
             orderUI.HideOrder();
         }
         
-        // Destroy customer after 5 seconds
-        Destroy(gameObject, 5f);
+        CustomerManager customerManager = FindAnyObjectByType<CustomerManager>();
+        if (customerManager != null)
+        {
+            customerManager.RequestCustomerLeave();
+        }
         
         return payment; // Return payment instead of score
     }
@@ -184,8 +222,12 @@ public class Customer : MonoBehaviour
                 orderUI.HideOrder();
             }
 
-            // Customer leaves immediately (destroy)
-            Destroy(gameObject, 1f);
+            // Notify CustomerManager to make customer leave
+            CustomerManager customerManager = FindAnyObjectByType<CustomerManager>();
+            if (customerManager != null)
+            {
+                customerManager.RequestCustomerLeave();
+            }
         }
     }
     
