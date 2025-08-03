@@ -232,7 +232,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ingredientName: OnionFull
   currentState: 0
-  processedPrefab: {fileID: 0}
+  price: 1
+  preparationTime: 5
+  thumbnailSprite: {fileID: 21300000, guid: f520ab5c3b0607a43a8792bd37ed7c43, type: 3}
 --- !u!114 &8577473610953492089
 MonoBehaviour:
   m_ObjectHideFlags: 0

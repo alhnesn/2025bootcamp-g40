@@ -191,6 +191,7 @@ MonoBehaviour:
   currentState: 1
   price: 1
   preparationTime: 7
+  thumbnailSprite: {fileID: 21300000, guid: 2b7afc6a90122584d93127627d6beb73, type: 3}
 --- !u!64 &8827688339197162758
 MeshCollider:
   m_ObjectHideFlags: 0

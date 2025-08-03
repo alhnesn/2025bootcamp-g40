@@ -160,6 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4647eda5b46d2ec45946427faf1327df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useOutlineHighlight: 1
 --- !u!114 &1199893260646112849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,7 +175,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ingredientName: BunTop
   currentState: 1
-  processedPrefab: {fileID: 0}
+  price: 1
+  preparationTime: 5
+  thumbnailSprite: {fileID: 21300000, guid: 9f320ddfbc565984c987af3caa19bbc8, type: 3}
 --- !u!64 &6341468130438078767
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -238,8 +241,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bottomPoint: {fileID: 7176137639623739072}
   topPoint: {fileID: 8488797444525083949}
-  canBeStackedOn: 1
-  canStackOnOthers: 1
 --- !u!114 &3673866217426178714
 MonoBehaviour:
   m_ObjectHideFlags: 0

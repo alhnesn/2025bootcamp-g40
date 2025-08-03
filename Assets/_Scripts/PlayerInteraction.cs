@@ -109,6 +109,17 @@ public class PlayerInteraction : MonoBehaviour
                     return;
                 }
 
+                Customer customer = hitInfo.collider.GetComponent<Customer>();
+                if (customer != null && Input.GetMouseButtonDown(0))
+                {
+                    if (!customer.HasActiveOrder())
+                    {
+                        customer.TakeOrder();
+                        Debug.Log("Took order from customer");
+                    }
+                    return;
+                }
+
                 else if (hitInfo.collider.GetComponent<Interactable>() != null)
                 {
                     // Regular item pickup

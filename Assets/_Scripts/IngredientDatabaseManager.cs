@@ -44,6 +44,11 @@ public class IngredientDatabaseManager : MonoBehaviour
         return Instance?.database?.GetPreparationTime(ingredientName) ?? 5.0f;
     }
     
+    public static Sprite GetThumbnail(string ingredientName)
+    {
+        return Instance?.database?.GetThumbnail(ingredientName);
+    }
+    
     public static bool HasIngredient(string ingredientName)
     {
         return Instance?.database?.HasIngredient(ingredientName) ?? false;

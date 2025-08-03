@@ -172,6 +172,7 @@ MonoBehaviour:
   currentState: 2
   price: 3
   preparationTime: 25
+  thumbnailSprite: {fileID: 21300000, guid: 54935338f2efe9240b423d24953bb9bd, type: 3}
 --- !u!54 &-1084552540907939535
 Rigidbody:
   m_ObjectHideFlags: 0

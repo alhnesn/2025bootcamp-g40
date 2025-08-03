@@ -183,7 +183,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ingredientName: TomatoFull
   currentState: 0
-  processedPrefab: {fileID: 1423571343637387031, guid: 493b71678353953469f66a28f1c2a7e0, type: 3}
+  price: 1
+  preparationTime: 5
+  thumbnailSprite: {fileID: 21300000, guid: 6d5b3db454af074439361ded6b47df96, type: 3}
 --- !u!114 &4662664423842006251
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -24,7 +24,7 @@ public class Customer : MonoBehaviour
 
     void Start()
     {
-        GenerateNewOrder();
+        Debug.Log($"{customerName} is waiting for order to be taken");
     }
     
     void Update()
@@ -33,6 +33,31 @@ public class Customer : MonoBehaviour
         {
             UpdateOrderTimer();
         }
+    }
+
+    public void TakeOrder()
+    {
+        Debug.Log($"Customer.TakeOrder() called for {customerName}");
+    
+        if (hasActiveOrder)
+        {
+            Debug.Log("Customer already has an active order!");
+            return;
+        }
+        
+        GenerateNewOrder();
+        Debug.Log($"Generated new order: {currentOrder?.GetOrderDescription()}");
+        
+        // Show order UI
+        OrderUIController orderUI = FindAnyObjectByType<OrderUIController>();
+        if (orderUI == null)
+        {
+            Debug.LogError("OrderUIController not found in scene!");
+            return;
+        }
+        
+        Debug.Log("Found OrderUIController, calling ShowOrder()");
+        orderUI.ShowOrder(currentOrder);
     }
 
     public void GenerateNewOrder()
@@ -88,6 +113,12 @@ public class Customer : MonoBehaviour
         hasActiveOrder = false;
         
         UpdateScoreDisplay();
+
+        OrderUIController orderUI = FindAnyObjectByType<OrderUIController>();
+        if (orderUI != null)
+        {
+            orderUI.HideOrder();
+        }
         
         // Destroy customer after 5 seconds
         Destroy(gameObject, 5f);
@@ -127,6 +158,13 @@ public class Customer : MonoBehaviour
             Debug.Log($"{customerName}'s order timed out! Customer is leaving.");
             hasActiveOrder = false;
             
+            // Hide order UI
+            OrderUIController orderUI = FindAnyObjectByType<OrderUIController>();
+            if (orderUI != null)
+            {
+                orderUI.HideOrder();
+            }
+
             // Customer leaves immediately (destroy)
             Destroy(gameObject, 1f);
         }

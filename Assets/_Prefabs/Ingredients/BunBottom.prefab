@@ -175,7 +175,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ingredientName: BunBottom
   currentState: 1
-  processedPrefab: {fileID: 0}
+  price: 1
+  preparationTime: 5
+  thumbnailSprite: {fileID: 21300000, guid: a8115ad13cef49347b5b3d6cce89b462, type: 3}
 --- !u!64 &-8477053928621810617
 MeshCollider:
   m_ObjectHideFlags: 0
