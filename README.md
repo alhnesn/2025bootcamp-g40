@@ -114,3 +114,34 @@ Culinary Master, oyuncuların kendi restoranlarını işlettikleri, çeşitli ye
   - Ekiptekiler önceki sprintte kendilerine verilen görevlerden memnun olduğunu ve oldukları departmanda çalışmaya devam etmek istediklerini belirtti
     - Grup 1 (Tasarım): Eren, Sudenaz
     - Grup 2 (Programlama): Alihan, Süeda
+
+
+# Sprint 3
+
+- **Sprint içinde tamamlanması tahmin edilen puan**: 120 Puan
+
+- **Puan tamamlama mantığı**: Son sprint olduğu için doğal olarak daha çok iş düştü
+
+- **Daily Scrum**: Günlük Scrum toplantılarımızı Discord üzerinden yapmaya karar verdik. Günlük Scrum toplantılarımızın ekran görüntülerini burada bulabilirsiniz: [Sprint 3 - Daily Scrums](RepoFiles/images/Sprint3/DailyScrums)
+
+- **Sprint board update**: Sprint board screenshot: 
+![Backlog 1](RepoFiles/images/Sprint3/SprintBoard/Sprint3_SprintBoard.jpg) 
+
+<details> <summary><h3>Ekran Görüntüleri</h3></summary>
+  
+  ![Screenshot 1](RepoFiles/images/Sprint3/kitchenTopView.jpg)
+  ![Screenshot 2](RepoFiles/images/Sprint3/fridge.jpg) 
+  ![Screenshot 3](RepoFiles/images/Sprint3/ingredientSpawners.jpg)
+  ![Screenshot 5](RepoFiles/images/Sprint3/IncomingCustomer.webp)
+  [Video of the game](https://youtu.be/t8vUsXVe3vo)
+
+  </details>
+
+- **Sprint Review**: 
+  - Oyun artık oyuna benzediği için projenin sonunun erişilebilir olduğunun farkına varmamız bize motivasyon sağladı. 3 Sprint boyunca çalışarak ürettiğimiz üründen memnunuz.
+  - Sprint Review katılımcıları: Alihan Esen, Fatmanur Sudenaz Helvacı, Rüştü Eren Çaya, Süeda Nur Sarıcan
+
+- **Sprint Retrospective:** 
+  - Herkes görevlerinden memnun olarak sprint'i tamamladık.
+    - Grup 1 (Tasarım): Eren, Sudenaz
+    - Grup 2 (Programlama): Alihan, Süeda
