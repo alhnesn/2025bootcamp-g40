@@ -133,6 +133,7 @@ Culinary Master, oyuncuların kendi restoranlarını işlettikleri, çeşitli ye
   ![Screenshot 2](RepoFiles/images/Sprint3/fridge.jpg) 
   ![Screenshot 3](RepoFiles/images/Sprint3/ingredientSpawners.jpg)
   ![Screenshot 5](RepoFiles/images/Sprint3/IncomingCustomer.webp)
+  
   [Video of the game](https://youtu.be/t8vUsXVe3vo)
 
   </details>
