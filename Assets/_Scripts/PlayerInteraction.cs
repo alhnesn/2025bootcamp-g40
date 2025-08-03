@@ -74,6 +74,13 @@ public class PlayerInteraction : MonoBehaviour
                     return;
                 }
 
+                FridgeDoor fridgeDoor = hitInfo.collider.GetComponent<FridgeDoor>();
+                if (fridgeDoor != null && Input.GetMouseButtonDown(0))
+                {
+                    fridgeDoor.ToggleDoor();
+                    return;
+                }
+
 
                 // Check for stations or drop
                 if (Input.GetKeyDown(KeyCode.E))
@@ -112,6 +119,20 @@ public class PlayerInteraction : MonoBehaviour
                         customer.TakeOrder();
                         Debug.Log("Took order from customer");
                     }
+                    return;
+                }
+
+                IngredientSpawner spawner = hitInfo.collider.GetComponent<IngredientSpawner>();
+                if (spawner != null && Input.GetMouseButtonDown(0))
+                {
+                    spawner.SpawnIngredient(this);
+                    return;
+                }
+
+                FridgeDoor fridgeDoorEmpty = hitInfo.collider.GetComponent<FridgeDoor>();
+                if (fridgeDoorEmpty != null && Input.GetMouseButtonDown(0))
+                {
+                    fridgeDoorEmpty.ToggleDoor();
                     return;
                 }
 
