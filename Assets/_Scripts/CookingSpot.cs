@@ -1,16 +1,29 @@
 using UnityEngine;
-
+[RequireComponent(typeof(AudioSource))]
 public class CookingSpot : MonoBehaviour
 {
     [Header("Cooking Spot Settings")]
     public Transform toolPlacement;  // Where the tool sits (optional, uses this transform if null)
     public bool isOccupied = false;
-    
+    [Header("Sound Effects")]
+    public AudioClip cookingSound; 
+    private AudioSource audioSource;
     // Current tool and cooking state
     private GameObject currentTool = null;
     private bool isCooking = false;
     private float currentCookTime = 0f;
 
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (cookingSound != null)
+        {
+            // Cýzýrtý sesini doðrudan AudioSource'a ata
+            audioSource.clip = cookingSound;
+            audioSource.loop = true; // Döngüyü aktif et
+            audioSource.playOnAwake = false; // Otomatik çalmayý kapat
+        }
+    }
     void Update()
     {
         if (isCooking && currentTool != null)
@@ -137,6 +150,7 @@ public class CookingSpot : MonoBehaviour
                 currentCookTime = 0f;
                 Debug.Log($"Started cooking {food.name} ({cookable.currentCookingState})");
             }
+            if (audioSource != null && !audioSource.isPlaying) audioSource.Play();
         }
     }
     
@@ -148,6 +162,7 @@ public class CookingSpot : MonoBehaviour
             currentCookTime = 0f;
             Debug.Log("Stopped cooking");
         }
+        if (audioSource != null && audioSource.isPlaying) audioSource.Stop();
     }
 
     private void UpdateCooking()

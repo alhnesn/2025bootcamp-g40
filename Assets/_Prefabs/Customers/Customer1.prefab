@@ -119,6 +119,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customerName: Customer
   orderTimeLimit: 120
+  newOrderSound: {fileID: 8300000, guid: 790b62df452678d489e8bef5843c0cfe, type: 3}
+  orderSuccessSound: {fileID: 8300000, guid: a66aa98bd38772441b8e50d55fe6d648, type: 3}
+  orderFailSound: {fileID: 0}
   possibleNames:
   - Mahmut
 --- !u!114 &4266294351120157566

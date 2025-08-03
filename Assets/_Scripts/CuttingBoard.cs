@@ -6,7 +6,15 @@ public class CuttingBoard : MonoBehaviour
     public Transform placementCenter;     // Center of the cutting board
     public float boardWidth = 1.0f;       // Width of the cutting board for positioning
     public float stackHeight = 0.1f;      // Height offset for stacking pieces
-    
+    [Header("Sound Effects")]
+    public AudioClip cuttingSound; 
+    private AudioSource audioSource;
+   
+    private void Awake()
+    {
+       
+        audioSource = GetComponent<AudioSource>();
+    }
     public void Process(PlayerInteraction player)
     {
         if (!player.IsHoldingItem()) return;
@@ -20,7 +28,11 @@ public class CuttingBoard : MonoBehaviour
             Debug.Log("This item cannot be cut!");
             return;
         }
-
+        if (cuttingSound != null)
+        {
+            
+            audioSource.PlayOneShot(cuttingSound);
+        }
         Debug.Log($"Cutting {heldItem.name} into {cuttable.GetPieceCount()} pieces");
 
         // Destroy the original item

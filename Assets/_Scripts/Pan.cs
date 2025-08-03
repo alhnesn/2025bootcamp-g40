@@ -7,9 +7,9 @@ public class Pan : MonoBehaviour
     public Transform cookingSpot;  // This becomes the stacking point
     
     private Container container;
-
+   
     //------------------------------------------------
-
+    private CookingSpot currentCookingSpot = null;
     void Start()
     {
         container = GetComponent<Container>();
@@ -18,13 +18,20 @@ public class Pan : MonoBehaviour
             Debug.LogError("Pan requires a Container component!");
             return;
         }
-        
+       
         // // Subscribe to events for cooking logic integration
-        // container.OnItemAdded += OnFoodAdded;
-        // container.OnItemRemoved += OnFoodRemoved;
+       
+        container.OnItemAdded += OnFoodAdded;
+        container.OnItemRemoved += OnFoodRemoved;
+    }
+    public void SetCurrentCookingSpot(CookingSpot spot)
+    {
+        currentCookingSpot = spot;
     }
     
-    // Optional wrapper methods
+
+   
+    
     public bool AddFood(GameObject food) => container.TryAddItem(food);
     public GameObject RemoveFood() => container.TakeTopItem();
     public bool HasFood() => !container.IsEmpty();
@@ -34,10 +41,18 @@ public class Pan : MonoBehaviour
     {
         // Hook for future cooking integration
         Debug.Log($"Food {food.name} added to pan");
+        if (currentCookingSpot != null)
+        {
+            currentCookingSpot.NotifyFoodAdded();
+        }
     }
     
     private void OnFoodRemoved(GameObject food)
     {
         Debug.Log($"Food {food.name} removed from pan");
+        if (currentCookingSpot != null)
+        {
+            currentCookingSpot.NotifyFoodRemoved();
+        }
     }
 }

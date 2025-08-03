@@ -8,6 +8,11 @@ public class Customer : MonoBehaviour
     public string customerName = "Customer";
     public float orderTimeLimit = 120f; // 2 minutes default
 
+    [Header("Sound Effects")]
+    public AudioClip newOrderSound;        
+    public AudioClip orderSuccessSound;     
+    public AudioClip orderFailSound;
+
     [Header("Customer Identity")]
     [SerializeField] private string[] possibleNames = {"Customer"};
     
@@ -59,7 +64,8 @@ public class Customer : MonoBehaviour
         
         GenerateNewOrder();
         Debug.Log($"Generated new order: {currentOrder?.GetOrderDescription()}");
-        
+
+        PlaySound(newOrderSound);
         // Show order UI
         OrderUIController orderUI = FindAnyObjectByType<OrderUIController>();
         if (orderUI == null)
@@ -115,8 +121,15 @@ public class Customer : MonoBehaviour
         
         float baseScore = currentOrder.EvaluateOrder(deliveredPlate);
         bool isPerfectOrder = (baseScore == currentOrder.perfectOrderScore);
-    
-        
+        if (baseScore > 50) // Basit bir kontrol: Skor 50'den yüksekse baþarýlý sayalým.
+        {
+            PlaySound(orderSuccessSound);
+        }
+        else
+        {
+            PlaySound(orderFailSound);
+        }
+
         // Check for early delivery
         float timeRatio = orderTimer / currentOrder.timeLimit;
         bool isEarlyDelivery = (timeRatio < 0.5f); // Delivered in first half of time
@@ -188,7 +201,22 @@ public class Customer : MonoBehaviour
         
         return payment; // Return payment instead of score
     }
+    private void PlaySound(AudioClip clipToPlay)
+    {
+        if (clipToPlay == null) return;
 
+        // Sahnede genel sesleri çalacak bir AudioSource bul.
+        AudioSource audioSource = FindAnyObjectByType<AudioSource>();
+        if (audioSource != null)
+        {
+            // PlayOneShot, kýsa ve anlýk sesler için en iyi yöntemdir.
+            audioSource.PlayOneShot(clipToPlay);
+        }
+        else
+        {
+            Debug.LogWarning("Seste çalacak bir AudioSource bulunamadý!");
+        }
+    }
     private void EmptyPlate(GameObject plate)
     {
         Container container = plate.GetComponent<Container>();
