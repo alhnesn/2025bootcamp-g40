@@ -86,7 +86,8 @@ MonoBehaviour:
   customerName: Customer
   orderTimeLimit: 120
   possibleNames:
-  - Arif
+  - Sude
+  - "S\xFCeda"
 --- !u!114 &-3458193701826643242
 MonoBehaviour:
   m_ObjectHideFlags: 0

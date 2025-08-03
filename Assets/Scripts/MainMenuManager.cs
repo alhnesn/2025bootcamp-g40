@@ -1,6 +1,6 @@
 // MainMenuManager.cs
 using UnityEngine;
-using UnityEngine.SceneManagement; // Sahne yönetimi için bu satýr ZORUNLUDUR!
+using UnityEngine.SceneManagement; // Sahne yï¿½netimi iï¿½in bu satï¿½r ZORUNLUDUR!
 using UnityEngine.UI;
 
 public class MainMenuManager : MonoBehaviour
@@ -10,14 +10,14 @@ public class MainMenuManager : MonoBehaviour
 
     [Header("Settings UI")]
     public Slider masterVolumeSlider;
-    // Bu fonksiyon "Oyuna Baþla" butonu tarafýndan çaðrýlacak.
+    // Bu fonksiyon "Oyuna Baï¿½la" butonu tarafï¿½ndan ï¿½aï¿½rï¿½lacak.
     private void Start()
     {
-        // Ayarlar panelini baþlangýçta kapalý tut (güvenlik için)
+        // Ayarlar panelini baï¿½langï¿½ï¿½ta kapalï¿½ tut (gï¿½venlik iï¿½in)
         settingsPanel.SetActive(false);
         mainMenuPanel.SetActive(true);
 
-        // YENÝ: Slider'ýn baþlangýç deðerini ayarla
+        // YENï¿½: Slider'ï¿½n baï¿½langï¿½ï¿½ deï¿½erini ayarla
         if (AudioManager.Instance != null && masterVolumeSlider != null)
         {
             masterVolumeSlider.value = AudioManager.Instance.GetMasterVolume();
@@ -25,15 +25,15 @@ public class MainMenuManager : MonoBehaviour
     }
     public void StartGame()
     {
-        // Build Settings'e eklediðimiz "GameScene" sahnesini yükle.
-        SceneManager.LoadScene("Scene1");
+        // Build Settings'e eklediï¿½imiz "GameScene" sahnesini yï¿½kle.
+        SceneManager.LoadScene("Main");
     }
 
-    // Bu fonksiyon "Oyundan Çýk" butonu tarafýndan çaðrýlacak.
+    // Bu fonksiyon "Oyundan ï¿½ï¿½k" butonu tarafï¿½ndan ï¿½aï¿½rï¿½lacak.
     public void QuitGame()
     {
-        Debug.Log("Oyundan çýkýlýyor..."); // Editörde test etmek için mesaj
-        Application.Quit(); // Bu komut sadece build alýnmýþ oyunda çalýþýr.
+        Debug.Log("Oyundan ï¿½ï¿½kï¿½lï¿½yor..."); // Editï¿½rde test etmek iï¿½in mesaj
+        Application.Quit(); // Bu komut sadece build alï¿½nmï¿½ï¿½ oyunda ï¿½alï¿½ï¿½ï¿½r.
     }
     // MainMenuManager.cs
     

@@ -121,5 +121,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3925100b4c4f32e4382d8fe0f80007b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ingredientPrefab: {fileID: 5568211279530722003, guid: d02742e32dabef34c9b1ec089d82cd3c, type: 3}
+  ingredientPrefab: {fileID: 8061018996050698058, guid: b6587b80b9a578f41859dc8ff3cdbed2, type: 3}
   showDebugLogs: 1
