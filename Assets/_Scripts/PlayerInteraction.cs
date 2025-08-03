@@ -69,12 +69,7 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     if (customer.HasActiveOrder())
                     {
-                        float score = customer.DeliverOrder(heldItem);
-                        // The customer will evaluate the order
-                        // You could show score feedback here
-                        
-                        // heldItem = null;
-                        // heldItemRb = null;
+                        float payment = customer.DeliverOrder(heldItem);
                     }
                     return;
                 }

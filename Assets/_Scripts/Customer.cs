@@ -8,11 +8,6 @@ public class Customer : MonoBehaviour
     public string customerName = "Customer";
     public float orderTimeLimit = 120f; // 2 minutes default
     
-    [Header("UI References")]
-    public Text orderDisplayText;
-    public Text timerText;
-    public Text scoreText;
-    
     // Current order
     private Order currentOrder = null;
     private float orderTimer = 0f;
@@ -72,8 +67,6 @@ public class Customer : MonoBehaviour
         hasActiveOrder = true;
         orderTimer = 0f;
         
-        UpdateOrderDisplay();
-        
         Debug.Log($"{customerName} ordered: {currentOrder.GetOrderDescription()}");
     }
 
@@ -85,34 +78,66 @@ public class Customer : MonoBehaviour
             return 0f;
         }
         
-        float score = currentOrder.EvaluateOrder(deliveredPlate);
+        float baseScore = currentOrder.EvaluateOrder(deliveredPlate);
+        bool isPerfectOrder = (baseScore == currentOrder.perfectOrderScore);
+    
         
-        // Early delivery bonus
+        // Check for early delivery
         float timeRatio = orderTimer / currentOrder.timeLimit;
-        if (timeRatio < 0.5f) // Delivered in first half of time
+        bool isEarlyDelivery = (timeRatio < 0.5f); // Delivered in first half of time
+        
+        float displayScore = baseScore;
+        float payment;
+
+        if (isPerfectOrder && isEarlyDelivery)
         {
-            score += currentOrder.earlyDeliveryBonus;
-            Debug.Log($"Early delivery bonus: +{currentOrder.earlyDeliveryBonus}");
+            // Perfect + Early: 120% payment, but display score as 100 + bonus
+            displayScore += currentOrder.earlyDeliveryBonus;
+            payment = currentOrder.totalPrice * 1.2f; // 120% payment
+            Debug.Log($"Perfect order with early delivery! 120% payment bonus!");
+        }
+        else if (isPerfectOrder)
+        {
+            // Perfect but not early: 100% payment
+            payment = currentOrder.totalPrice; // Full payment
+            Debug.Log($"Perfect order! Full payment received.");
+        }
+        else
+        {
+            // Imperfect order: payment based on score percentage
+            if (isEarlyDelivery)
+            {
+                displayScore += currentOrder.earlyDeliveryBonus;
+                Debug.Log($"Early delivery bonus: +{currentOrder.earlyDeliveryBonus}");
+            }
+            
+            // Ensure score is 0-100 for display
+            displayScore = Mathf.Clamp(displayScore, 0f, 100f);
+            payment = (displayScore / 100f) * currentOrder.totalPrice;
         }
         
-        // Ensure score is 0-100
-        score = Mathf.Clamp(score, 0f, 100f);
-        
-        // Calculate payment based on score
-        float payment = (score / 100f) * currentOrder.totalPrice;
-        
-        totalScore += score;
-    
+        // Ensure display score is 0-100 for UI
+        displayScore = Mathf.Clamp(displayScore, 0f, 100f);
+        totalScore += displayScore;
+
+        // ADD PAYMENT TO BALANCE
+        if (BalanceManager.Instance != null)
+        {
+            BalanceManager.Instance.AddMoney(payment);
+        }
+        else
+        {
+            Debug.LogWarning("BalanceManager not found! Payment not processed.");
+        }
+
         // Empty the plate - destroy all ingredients
         EmptyPlate(deliveredPlate);
         
-        Debug.Log($"Order delivered! Score: {score}/100, Payment: ${payment:F2} (Full price: ${currentOrder.totalPrice:F2})");
+        Debug.Log($"Order delivered! Score: {displayScore}/100, Payment: ${payment:F2} (Full price: ${currentOrder.totalPrice:F2})");
         Debug.Log($"Total score: {totalScore}");
         
         // Complete the order
         hasActiveOrder = false;
-        
-        UpdateScoreDisplay();
 
         OrderUIController orderUI = FindAnyObjectByType<OrderUIController>();
         if (orderUI != null)
@@ -145,12 +170,6 @@ public class Customer : MonoBehaviour
     private void UpdateOrderTimer()
     {
         orderTimer += Time.deltaTime;
-    
-        if (timerText != null)
-        {
-            float remainingTime = Mathf.Max(0f, currentOrder.timeLimit - orderTimer);
-            timerText.text = $"Time: {remainingTime:F1}s";
-        }
         
         // Check if time is up - customer leaves
         if (orderTimer >= currentOrder.timeLimit)
@@ -170,21 +189,7 @@ public class Customer : MonoBehaviour
         }
     }
     
-    private void UpdateOrderDisplay()
-    {
-        if (orderDisplayText != null && currentOrder != null)
-        {
-            orderDisplayText.text = currentOrder.GetOrderDescription();
-        }
-    }
     
-    private void UpdateScoreDisplay()
-    {
-        if (scoreText != null)
-        {
-            scoreText.text = $"Score: {totalScore:F0}";
-        }
-    }
     
     // Public getters
     public bool HasActiveOrder() => hasActiveOrder;

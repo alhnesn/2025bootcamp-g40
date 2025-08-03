@@ -282,23 +282,32 @@ public class OrderUIController : MonoBehaviour
     {
         float elapsed = Time.time - orderStartTime;
         float remaining = Mathf.Max(0f, currentOrder.timeLimit - elapsed);
+        float timeRatio = elapsed / currentOrder.timeLimit;
         
         int minutes = Mathf.FloorToInt(remaining / 60f);
         int seconds = Mathf.FloorToInt(remaining % 60f);
         
         timerText.text = $"{minutes:00}:{seconds:00}";
         
-        // Color coding for urgency
-        if (remaining < 30f)
+        // New color coding system
+        if (remaining < 15f)
         {
+            // Critical time - Red
             timerText.color = Color.red;
         }
-        else if (remaining < 60f)
+        else if (remaining < 30f)
         {
+            // Warning time - Yellow
             timerText.color = Color.yellow;
+        }
+        else if (timeRatio < 0.5f) // First half of total time
+        {
+            // Early delivery window - Green
+            timerText.color = Color.green;
         }
         else
         {
+            // Normal time - White
             timerText.color = Color.white;
         }
     }

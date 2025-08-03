@@ -18,10 +18,10 @@ public abstract class Order
     public float totalPrice;
     
     [Header("Scoring System (0-100)")]
-    public float extraIngredientPenalty = -50f;
-    public float missingIngredientPenalty = -30f;
-    public float wrongOrderPenalty = -20f;
-    public float perfectOrderScore = 90f;
+    public float extraIngredientPenalty = -30f;
+    public float missingIngredientPenalty = -20f;
+    public float wrongOrderPenalty = -10f;
+    public float perfectOrderScore = 100f;
     public float earlyDeliveryBonus = 10f;
     
     public abstract void GenerateRandomOrder();
